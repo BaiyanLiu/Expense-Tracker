@@ -1,0 +1,19 @@
+spring:
+  data.rest.base-path: /api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgres
+    username: postgres
+    password: postgres
+
+  jpa.hibernate.ddl-auto: create
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+  endpoint:
+    health:
+      show-details: always

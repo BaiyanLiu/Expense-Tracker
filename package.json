@@ -1,0 +1,27 @@
+{
+  "name": "expensetracker",
+  "version": "0.0.1",
+  "description": "Expense Tracker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baiyanliu/"
+  },
+  "dependencies": {
+    "prop-types": "^15.8.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-stomp": "^5.1.0",
+    "rest": "^2.0.0"
+  },
+  "scripts": {
+    "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.1",
+    "@babel/preset-react": "^7.27.1",
+    "babel-loader": "^10.0.0",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1"
+  }
+}
