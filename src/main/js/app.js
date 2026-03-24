@@ -28,71 +28,69 @@ class App extends React.Component {
 
 class ExpenseList extends React.Component {
     render() {
-        function getExpenseDates(expenses) {
-            const expenseDates = new Map();
+        function getExpensesByDate(expenses) {
+            const expensesByDate = new Map();
 
-            expenses.map(expense => expense.date).forEach(expenseDate => {
-                const date = new Date(expenseDate);
-                const year = date.getUTCFullYear();
-                const month = date.getUTCMonth();
+            expenses.forEach(expense => {
+                const expenseDate = new Date(expense.date);
+                const year = expenseDate.getUTCFullYear();
+                const month = expenseDate.getUTCMonth();
+                const date = expenseDate.getUTCDate();
 
-                if (!expenseDates.has(year)) {
-                    expenseDates.set(year, new Map());
+                if (!expensesByDate.has(year)) {
+                    expensesByDate.set(year, new Map());
                 }
-                if (!expenseDates.get(year).has(month)) {
-                    expenseDates.get(year).set(month, new Set());
+                const expensesForYear = expensesByDate.get(year);
+
+                if (!expensesForYear.has(month)) {
+                    expensesForYear.set(month, new Map());
+                }
+                const expensesForMonth = expensesForYear.get(month);
+
+                if (!expensesForMonth.has(date)) {
+                    expensesForMonth.set(date, []);
                 }
 
-                expenseDates.get(year).get(month).add(date.getUTCDate());
+                expensesForMonth.get(date).push(expense);
             });
 
-            return expenseDates;
+            return expensesByDate;
         }
 
-        function getFirstYearAndMonth(expenseDates) {
-            const expenseYears = Array.from(expenseDates.keys());
-            expenseYears.sort();
-            const firstYear = expenseYears[0];
+        function getFirstYearAndMonth(expensesByDate) {
+            const years = Array.from(expensesByDate.keys());
+            years.sort();
+            const firstYear = years[0];
 
-            const expenseMonths = expenseDates.get(firstYear) ? Array.from(expenseDates.get(firstYear).keys()) : [];
-            expenseMonths.sort();
+            const months = Array.from(expensesByDate.get(firstYear)?.keys() ?? []);
+            months.sort();
 
-            return {firstYear, firstMonth: expenseMonths[0]};
+            return {firstYear, firstMonth: months[0]};
         }
 
-        function getYearsAndMonths(expenseDates) {
-            const {firstYear, firstMonth} = getFirstYearAndMonth(expenseDates);
+        function getYearsAndMonths(expensesByDate) {
+            const {firstYear, firstMonth} = getFirstYearAndMonth(expensesByDate);
             const today = new Date();
-            const lastYear = today.getFullYear();
+            const finalYear = today.getFullYear();
+            const finalMonth = today.getMonth();
 
             const yearsAndMonths = [];
 
-            for (let year = firstYear; year <= lastYear; year++) {
-                const startMonth = year === firstYear ? firstMonth : 0;
-                const endMonth = year === lastYear ? today.getMonth() : 11;
-                yearsAndMonths.push({year, months: Array.from({length: endMonth - startMonth + 1}, (_, i) => startMonth + i)});
+            for (let year = firstYear; year <= finalYear; year++) {
+                const firstMonthOfYear = year === firstYear ? firstMonth : 0;
+                const finalMonthOfYear = year === finalYear ? finalMonth : 11;
+                yearsAndMonths.push({year, months: Array.from({length: finalMonthOfYear - firstMonthOfYear + 1}, (_, i) => firstMonthOfYear + i)});
             }
 
             return yearsAndMonths;
         }
 
-        const expenseDates = getExpenseDates(this.props.expenses);
-        const yearsAndMonths = getYearsAndMonths(expenseDates);
+        const expensesByDate = getExpensesByDate(this.props.expenses);
+        const yearsAndMonths = getYearsAndMonths(expensesByDate);
 
         return (
             <div>
-                {yearsAndMonths.map(yearAndMonths => <Year year={yearAndMonths.year} months={yearAndMonths.months}/>)}
-                {this.props.expenses.map(expense => <Expense expense={expense}/>)}
-            </div>
-        );
-    }
-}
-
-class Expense extends React.Component {
-    render() {
-        return (
-            <div>
-                ID={this.props.expense.id}, ${this.props.expense.amount}, Name={this.props.expense.type.name}, Category={this.props.expense.type.category}, Date={this.props.expense.date}
+                {yearsAndMonths.map(yearAndMonths => <Year year={yearAndMonths.year} months={yearAndMonths.months} expenses={expensesByDate.get(yearAndMonths.year)}/>)}
             </div>
         );
     }
@@ -102,8 +100,8 @@ class Year extends React.Component {
     render() {
         return (
             <div>
-                Year={this.props.year}
-                {this.props.months.map(month => <Month year={this.props.year} month={month}/>)}
+                <h3>Year={this.props.year}</h3>
+                {this.props.months.map(month => <Month year={this.props.year} month={month} expenses={this.props.expenses?.get(month)} />)}
             </div>
         );
     }
@@ -111,14 +109,16 @@ class Year extends React.Component {
 
 class Month extends React.Component {
     render() {
+        const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
         function getWeeks(year, month) {
-            const lastDate = new Date(year, month + 1, 0).getUTCDate();
+            const finalDate = new Date(year, month + 1, 0).getUTCDate();
 
             const weeks = [];
             let currentWeek = {};
             let currentDay = new Date(year, month, 1).getUTCDay();
 
-            for (let date = 1; date <= lastDate; date++) {
+            for (let date = 1; date <= finalDate; date++) {
                 currentWeek[currentDay] = date;
                 if (++currentDay === 7) {
                     weeks.push(currentWeek);
@@ -135,8 +135,23 @@ class Month extends React.Component {
 
         return (
             <div>
-                Month={this.props.month}
-                {weeks.map(week => <Week week={week}/>)}
+                <h4>Month={MONTHS[this.props.month]}</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {weeks.map(week => <Week week={week} expenses={this.props.expenses}/>)}
+                    </tbody>
+                </table>
             </div>
         );
     }
@@ -147,18 +162,36 @@ class Week extends React.Component {
         const DAYS = [0, 1, 2, 3, 4, 5, 6];
 
         return (
-            <div>
-                {DAYS.map(day => <Day day={day} date={this.props.week[day]}/>)}
-            </div>
+            <tr>
+                {DAYS.map(day => {
+                    const date = this.props.week[day];
+                    return <Day date={date} expenses={this.props.expenses?.get(date)}/>
+                })}
+            </tr>
         );
     }
 }
 
 class Day extends React.Component {
     render() {
+        if (this.props.date) {
+            return (
+                <td>
+                    Date={this.props.date}
+                    {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
+                </td>
+            );
+        } else {
+            return <td></td>
+        }
+    }
+}
+
+class Expense extends React.Component {
+    render() {
         return (
             <div>
-                Day={this.props.day}, Date={this.props.date}
+                ID={this.props.expense.id}, ${this.props.expense.amount}, Name={this.props.expense.type.name}, Category={this.props.expense.type.category}, Date={this.props.expense.date}
             </div>
         );
     }
