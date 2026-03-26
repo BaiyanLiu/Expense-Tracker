@@ -1,0 +1,32 @@
+body {
+  background-color: black;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  text-align: center;
+}
+
+.calendar {
+  display: flex;
+  justify-content: center;
+}
+
+.month {
+
+  & th, td {
+    padding: 1px;
+    text-align: center;
+    width: 150px;
+  }
+
+  & td {
+    border: 1px solid white;
+    height: 75px;
+  }
+
+  & .empty {
+    border: 0;
+  }
+}

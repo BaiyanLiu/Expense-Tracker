@@ -22,7 +22,9 @@ export default class Month extends React.Component {
                 currentDay = 0;
             }
         }
-        weeks.push(currentWeek);
+        if (Object.keys(currentWeek).length !== 0) {
+            weeks.push(currentWeek);
+        }
 
         return weeks;
     }
@@ -31,8 +33,8 @@ export default class Month extends React.Component {
         const weeks = this.getWeeks(this.props.year, this.props.month);
 
         return (
-            <div>
-                <h4>Month={MONTHS[this.props.month]}</h4>
+            <div className="month">
+                <h3>{MONTHS[this.props.month]}</h3>
                 <table>
                     <thead>
                     <tr>

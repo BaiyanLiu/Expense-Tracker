@@ -20,7 +20,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="calendar">
                 <Calendar expenses={this.state.expenses}/>
             </div>
         );

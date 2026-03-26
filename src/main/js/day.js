@@ -8,12 +8,12 @@ export default class Day extends React.Component {
         if (this.props.date) {
             return (
                 <td>
-                    Date={this.props.date}
+                    <div>{this.props.date}</div>
                     {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
                 </td>
             );
         } else {
-            return <td></td>
+            return <td className="empty"></td>
         }
     }
 }
