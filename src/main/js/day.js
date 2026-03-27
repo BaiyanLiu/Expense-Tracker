@@ -8,8 +8,10 @@ export default class Day extends React.Component {
         if (this.props.date) {
             return (
                 <td>
-                    <div>{this.props.date}</div>
-                    {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
+                    <div className="date">
+                        <div className="header">{this.props.date}</div>
+                        {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
+                    </div>
                 </td>
             );
         } else {

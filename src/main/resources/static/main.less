@@ -1,3 +1,5 @@
+@highlight-color: darken(#0000ff, 20%);
+
 body {
   background-color: black;
   color: white;
@@ -23,10 +25,19 @@ body {
 
   & td {
     border: 1px solid white;
-    height: 75px;
+    height: 100px;
   }
 
   & .empty {
     border: 0;
+  }
+}
+
+.date {
+  height: 100%;
+  overflow: auto;
+
+  .header {
+    background-color: @highlight-color;
   }
 }
