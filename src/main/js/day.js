@@ -7,11 +7,15 @@ export default class Day extends React.Component {
     render() {
         if (this.props.date) {
             return (
-                <td>
-                    <div className="date">
-                        <div className="header">{this.props.date}</div>
-                        {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
+                <td className="date">
+                    <div className="header">
+                        {this.props.date}
+                        {this.props.expenses &&
+                            <div className="total">
+                                ${this.props.expenses.reduce((total, current) => total + current.amount, 0)}
+                            </div>}
                     </div>
+                    {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
                 </td>
             );
         } else {

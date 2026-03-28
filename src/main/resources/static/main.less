@@ -34,10 +34,15 @@ body {
 }
 
 .date {
-  height: 100%;
-  overflow: auto;
+  vertical-align: top;
 
   .header {
     background-color: @highlight-color;
+    padding: 2px;
+    text-align: left;
+
+    .total {
+      float: right;
+    }
   }
 }
