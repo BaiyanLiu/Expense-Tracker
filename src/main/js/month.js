@@ -29,12 +29,19 @@ export default class Month extends React.Component {
         return weeks;
     }
 
+    getTotal(expenses) {
+        let total = 0;
+        expenses?.forEach((date, _0, _1) =>
+            total += date.reduce((total, expense) => total + expense.amount, 0))
+        return total.toFixed(2);
+    }
+
     render() {
         const weeks = this.getWeeks(this.props.year, this.props.month);
 
         return (
             <div className="month">
-                <h3>{MONTHS[this.props.month]}</h3>
+                <h3>{MONTHS[this.props.month]} - ${this.getTotal(this.props.expenses)}</h3>
                 <table>
                     <thead>
                     <tr>

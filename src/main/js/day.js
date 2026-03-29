@@ -12,7 +12,7 @@ export default class Day extends React.Component {
                         {this.props.date}
                         {this.props.expenses &&
                             <div className="total">
-                                ${this.props.expenses.reduce((total, current) => total + current.amount, 0)}
+                                ${this.props.expenses.reduce((total, expense) => total + expense.amount, 0).toFixed(2)}
                             </div>}
                     </div>
                     {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
