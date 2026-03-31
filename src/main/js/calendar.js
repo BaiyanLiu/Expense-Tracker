@@ -1,11 +1,11 @@
 'use strict';
 
-import React from 'react';
+import React from "react";
 import Year from './year';
 
-export default class Calendar extends React.Component {
+function Calendar({expenses}) {
 
-    getExpensesByDate(expenses) {
+    const getExpensesByDate = () => {
         const expensesByDate = new Map();
 
         expenses.forEach(expense => {
@@ -34,7 +34,7 @@ export default class Calendar extends React.Component {
         return expensesByDate;
     }
 
-    getYearsAndMonths(expensesByDate) {
+    const getYearsAndMonths = (expensesByDate) => {
         const years = Array.from(expensesByDate.keys());
         years.sort();
         const firstYear = years[0];
@@ -48,14 +48,14 @@ export default class Calendar extends React.Component {
         return yearsAndMonths;
     }
 
-    render() {
-        const expensesByDate = this.getExpensesByDate(this.props.expenses);
-        const yearsAndMonths = this.getYearsAndMonths(expensesByDate);
+    const expensesByDate = getExpensesByDate();
+    const yearsAndMonths = getYearsAndMonths(expensesByDate);
 
-        return (
-            <div>
-                {yearsAndMonths.map(yearAndMonths => <Year year={yearAndMonths.year} months={yearAndMonths.months} expenses={expensesByDate.get(yearAndMonths.year)}/>)}
-            </div>
-        );
-    }
+    return (
+        <div>
+            {yearsAndMonths.map(yearAndMonths => <Year year={yearAndMonths.year} months={yearAndMonths.months} expenses={expensesByDate.get(yearAndMonths.year)}/>)}
+        </div>
+    );
 }
+
+export default Calendar;

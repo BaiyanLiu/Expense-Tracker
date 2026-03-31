@@ -1,30 +1,24 @@
 'use strict';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import Calendar from './calendar';
 
-class App extends React.Component {
+function App() {
+    const [expenses, setExpenses] = useState([]);
 
-    constructor(props) {
-        super(props);
-        this.state = {expenses: []}
-    }
-
-    componentDidMount() {
+    useEffect(() => {
         fetch('api/expense/all')
             .then(response => response.json())
             .then(data => data._embedded.expenses)
-            .then(data => this.setState({expenses: data}));
-    }
+            .then(data => setExpenses(data));
+    }, [])
 
-    render() {
-        return (
-            <div className="calendar">
-                <Calendar expenses={this.state.expenses}/>
-            </div>
-        );
-    }
+    return (
+        <div className="calendar">
+            <Calendar expenses={expenses}/>
+        </div>
+    )
 }
 
 const root = createRoot(document.getElementById('react'));

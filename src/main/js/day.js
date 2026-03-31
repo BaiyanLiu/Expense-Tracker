@@ -3,23 +3,21 @@
 import React from "react";
 import Expense from "./expense";
 
-export default class Day extends React.Component {
-    render() {
-        if (this.props.date) {
-            return (
-                <td className="date">
-                    <div className="header">
-                        {this.props.date}
-                        {this.props.expenses &&
-                            <div className="total">
-                                ${this.props.expenses.reduce((total, expense) => total + expense.amount, 0).toFixed(2)}
-                            </div>}
-                    </div>
-                    {this.props.expenses?.map(expense => <Expense expense={expense}/>)}
-                </td>
-            );
-        } else {
-            return <td className="empty"></td>
-        }
-    }
+function Day({date, expenses}) {
+    return (
+        date
+            ? <td className="date">
+                <div className="header">
+                    {date}
+                    {expenses &&
+                        <div className="total">
+                            ${expenses.reduce((total, expense) => total + expense.amount, 0).toFixed(2)}
+                        </div>}
+                </div>
+                {expenses?.map(expense => <Expense expense={expense}/>)}
+            </td>
+            : <td className="empty"></td>
+    )
 }
+
+export default Day;

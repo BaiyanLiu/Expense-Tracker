@@ -3,9 +3,9 @@
 import React from 'react';
 import Month from "./month";
 
-export default class Year extends React.Component {
+function Year({year, months, expenses}) {
 
-    getTotal(expenses) {
+    const getTotal = () => {
         let total = 0;
         expenses?.forEach((month, _0, _1) =>
             month.forEach((date, _0, _1) =>
@@ -13,12 +13,12 @@ export default class Year extends React.Component {
         return total.toFixed(2);
     }
 
-    render() {
-        return (
-            <div>
-                <h2>{this.props.year} - ${this.getTotal(this.props.expenses)}</h2>
-                {this.props.months.map(month => <Month year={this.props.year} month={month} expenses={this.props.expenses?.get(month)} />)}
-            </div>
-        );
-    }
+    return (
+        <div>
+            <h2>{year} - ${getTotal()}</h2>
+            {months.map(month => <Month year={year} month={month} expenses={expenses?.get(month)}/>)}
+        </div>
+    )
 }
+
+export default Year;
