@@ -3,8 +3,9 @@
 import React from "react";
 import Week from "./week";
 
+const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 function Month({year, month, expenses}) {
-    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     const getWeeks = () => {
         const finalDate = new Date(year, month + 1, 0).getUTCDate();
@@ -39,7 +40,7 @@ function Month({year, month, expenses}) {
 
     return (
         <div className="month">
-            <h3>{MONTHS[month]} - ${getTotal()}</h3>
+            <h3>{MONTH_NAMES[month]} - ${getTotal()}</h3>
             <table>
                 <thead>
                 <tr>

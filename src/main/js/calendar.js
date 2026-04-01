@@ -1,9 +1,11 @@
 'use strict';
 
-import React from "react";
-import Year from './year';
+import React, {useState} from "react";
+import Year from "./year";
+import YearHeader from "./yearHeader";
 
 function Calendar({expenses}) {
+    const [activeYear, setActiveYear] = useState(new Date().getFullYear());
 
     const getExpensesByDate = () => {
         const expensesByDate = new Map();
@@ -34,26 +36,21 @@ function Calendar({expenses}) {
         return expensesByDate;
     }
 
-    const getYearsAndMonths = (expensesByDate) => {
-        const years = Array.from(expensesByDate.keys());
-        years.sort();
-        const firstYear = years[0];
-        const finalYear = new Date().getFullYear();
-
-        const yearsAndMonths = [];
-        for (let year = firstYear; year <= finalYear; year++) {
-            yearsAndMonths.push({year, months: Array.from({length: 12}, (_, i) => i)});
-        }
-
-        return yearsAndMonths;
-    }
-
     const expensesByDate = getExpensesByDate();
-    const yearsAndMonths = getYearsAndMonths(expensesByDate);
+    const years = Array.from(expensesByDate.keys());
+    years.sort();
 
     return (
         <div>
-            {yearsAndMonths.map(yearAndMonths => <Year year={yearAndMonths.year} months={yearAndMonths.months} expenses={expensesByDate.get(yearAndMonths.year)}/>)}
+            {years.map(year =>
+                <YearHeader
+                    year={year}
+                    expenses={expensesByDate.get(year)}
+                    isActive={year === activeYear}
+                    setActiveYear={setActiveYear}/>)}
+            <Year
+                year={activeYear}
+                expenses={expensesByDate.get(activeYear)}/>
         </div>
     );
 }

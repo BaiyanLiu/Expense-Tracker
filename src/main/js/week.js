@@ -1,10 +1,11 @@
 'use strict';
 
-import React from 'react';
+import React from "react";
 import Day from "./day";
 
+const DAYS = Array.from({length: 7}, (_, i) => i);
+
 function Week({week, expenses}) {
-    const DAYS = [0, 1, 2, 3, 4, 5, 6];
 
     return (
         <tr>
