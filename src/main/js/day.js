@@ -6,17 +6,17 @@ import Expense from "./expense";
 function Day({date, expenses}) {
     return (
         date
-            ? <td className="date">
-                <div className="header">
+            ? <td className="day">
+                <div className="day-header">
                     {date}
                     {expenses &&
-                        <div className="total">
+                        <div className="day-header-total">
                             ${expenses.reduce((total, expense) => total + expense.amount, 0).toFixed(2)}
                         </div>}
                 </div>
                 {expenses?.map(expense => <Expense expense={expense}/>)}
             </td>
-            : <td className="empty"></td>
+            : <td className="day-empty"></td>
     )
 }
 

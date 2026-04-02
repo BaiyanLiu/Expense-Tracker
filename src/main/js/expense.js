@@ -4,8 +4,9 @@ import React from "react";
 
 function Expense({expense}) {
     return (
-        <div>
-            Name={expense.type.name}, Category={expense.type.category}, ${expense.amount}
+        <div className="expense">
+            <div className="expense-name">{expense.type.name}</div>
+            <div className="expense-amount">${expense.amount}</div>
         </div>
     )
 }

@@ -36,27 +36,38 @@ body {
     text-align: center;
     width: 150px;
   }
-
-  & td {
-    border: 1px solid white;
-    height: 100px;
-  }
-
-  & .empty {
-    border: 0;
-  }
 }
 
-.date {
+.day {
+  border: 1px solid white;
+  height: 100px;
   vertical-align: top;
 
-  .header {
+  .day-header {
     background-color: @highlight-color;
     padding: 2px;
     text-align: left;
 
-    .total {
+    .day-header-total {
       float: right;
     }
+  }
+}
+
+.day-empty {
+  border: 0;
+}
+
+.expense {
+  display: grid;
+  grid-template-columns: auto auto;
+  padding: 2px;
+
+  .expense-name {
+    text-align: left;
+  }
+
+  .expense-amount {
+    text-align: right;
   }
 }
