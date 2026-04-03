@@ -1,5 +1,10 @@
 @highlight-color: darken(#0000ff, 20%);
 
+.button {
+  cursor: pointer;
+  text-decoration: none;
+}
+
 body {
   background-color: black;
   color: white;
@@ -16,10 +21,9 @@ body {
 }
 
 .year-header {
-  cursor: pointer;
+  .button();
   display: inline-block;
   padding: 5px;
-  text-decoration: none;
 }
 
 .year-header-active {
@@ -59,6 +63,7 @@ body {
 }
 
 .expense {
+  .button();
   display: grid;
   grid-template-columns: auto auto;
   padding: 2px;
@@ -70,4 +75,11 @@ body {
   .expense-amount {
     text-align: right;
   }
+}
+
+.expense-data {
+  border: 1px solid white;
+  border-radius: 5px;
+  margin: 2px;
+  position: relative;
 }
