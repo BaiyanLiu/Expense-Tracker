@@ -9,6 +9,7 @@ function Day({date, expenses}) {
             ? <td className="day">
                 <div className="day-header">
                     {date}
+                    <div className="add-expense-button">+</div>
                     {expenses &&
                         <div className="day-header-total">
                             ${expenses.reduce((total, expense) => total + expense.amount, 0).toFixed(2)}

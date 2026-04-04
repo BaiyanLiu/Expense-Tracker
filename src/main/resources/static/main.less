@@ -5,6 +5,11 @@
   text-decoration: none;
 }
 
+.border {
+  border: 1px solid white;
+  border-radius: 5px;
+}
+
 body {
   background-color: black;
   color: white;
@@ -55,6 +60,21 @@ body {
     .day-header-total {
       float: right;
     }
+
+    .add-expense-button {
+      .button();
+      .border();
+      display: none;
+      font-weight: bold;
+      margin: -1px 5px;
+      padding: 0 3px;
+    }
+
+    &:hover {
+      .add-expense-button {
+        display: inline-block;
+      }
+    }
   }
 }
 
@@ -78,8 +98,7 @@ body {
 }
 
 .expense-data {
-  border: 1px solid white;
-  border-radius: 5px;
+  .border();
   margin: 2px;
   position: relative;
 }
