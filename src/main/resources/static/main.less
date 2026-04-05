@@ -1,14 +1,4 @@
-@highlight-color: darken(#0000ff, 20%);
-
-.button {
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.border {
-  border: 1px solid white;
-  border-radius: 5px;
-}
+@import "library";
 
 body {
   background-color: black;
@@ -62,8 +52,7 @@ body {
     }
 
     .add-expense-button {
-      .button();
-      .border();
+      .button-with-border();
       display: none;
       font-weight: bold;
       margin: -1px 5px;
@@ -80,6 +69,34 @@ body {
 
 .day-empty {
   border: 0;
+}
+
+.add-expense {
+  .border();
+  margin: 2px;
+
+  & input {
+    margin: 2px;
+    width: 132px;
+  }
+
+  .add-expense-footer {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+
+  .add-expense-button {
+    .button-with-border;
+    margin: 2px;
+  }
+
+  .add-expense-cancel {
+    .add-expense-button();
+  }
+
+  .add-expense-save {
+    .add-expense-button();
+  }
 }
 
 .expense {
@@ -100,5 +117,4 @@ body {
 .expense-data {
   .border();
   margin: 2px;
-  position: relative;
 }
