@@ -2,7 +2,7 @@
 
 body {
   background-color: black;
-  color: white;
+  color: @primary-color;
   font-family: Arial, sans-serif;
 }
 
@@ -23,9 +23,9 @@ body {
 
 .year-header-active {
   .year-header();
-  background-color: white;
+  background-color: @primary-color;
   border-radius: 5px;
-  color: black;
+  color: @primary-background-color;
 }
 
 .month {
@@ -38,7 +38,7 @@ body {
 }
 
 .day {
-  border: 1px solid white;
+  border: 1px solid @primary-color;
   height: 100px;
   vertical-align: top;
 
@@ -61,7 +61,12 @@ body {
 
     &:hover {
       .add-expense-button {
+        background-color: @positive-color-darker;
         display: inline-block;
+
+        &:hover {
+          background-color: @positive-color-dark;
+        }
       }
     }
   }
@@ -92,10 +97,20 @@ body {
 
   .add-expense-cancel {
     .add-expense-button();
+    background-color: @negative-color-darker;
+
+    &:hover {
+      background-color: @negative-color-dark;
+    }
   }
 
   .add-expense-save {
     .add-expense-button();
+    background-color: @positive-color-darker;
+
+    &:hover {
+      background-color: @positive-color-dark;
+    }
   }
 }
 
@@ -117,4 +132,12 @@ body {
 .expense-data {
   .border();
   margin: 2px;
+}
+
+.positive-amount {
+  color: @positive-color;
+}
+
+.negative-amount {
+  color: @negative-color;
 }

@@ -22,8 +22,8 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         expenseRepository.saveAll(List.of(
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(6L)), BigDecimal.valueOf(123.45d), new Type("type1", "category1")),
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), BigDecimal.valueOf(123.45d), new Type("type1", "category1")),
+                new Expense(Date.valueOf(LocalDate.now().minusMonths(6L)), BigDecimal.valueOf(-123.45d), new Type("type1", "category1")),
+                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), BigDecimal.valueOf(-123.45d), new Type("type1", "category1")),
                 new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), BigDecimal.valueOf(234.56d), new Type("type2", "category2")),
                 new Expense(Date.valueOf(LocalDate.now().minusDays(1L)), BigDecimal.valueOf(234.56d), new Type("type2", "category2"))
         ));

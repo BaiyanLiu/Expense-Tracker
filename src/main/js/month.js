@@ -37,10 +37,11 @@ function Month({year, month, expenses}) {
     }
 
     const weeks = getWeeks();
+    const total = getTotal();
 
     return (
         <div className="month">
-            <h3>{MONTH_NAMES[month]} - ${getTotal()}</h3>
+            <h3>{MONTH_NAMES[month]} - <span className={`${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span></h3>
             <table>
                 <thead>
                 <tr>
