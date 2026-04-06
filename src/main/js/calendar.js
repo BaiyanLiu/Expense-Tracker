@@ -44,6 +44,7 @@ function Calendar({expenses}) {
         <div>
             {years.map(year =>
                 <YearHeader
+                    key={year}
                     year={year}
                     expenses={expensesByDate.get(year)}
                     isActive={year === activeYear}

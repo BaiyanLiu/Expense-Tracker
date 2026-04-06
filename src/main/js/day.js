@@ -19,7 +19,7 @@ function Day({date, expenses}) {
                         <span className={`day-header-total ${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span>}
                 </div>
                 {isAddingExpense && <AddExpense setIsAddingExpense={setIsAddingExpense}/>}
-                {expenses?.map(expense => <Expense expense={expense}/>)}
+                {expenses?.map(expense => <Expense key={expense.id} expense={expense}/>)}
             </td>
             : <td className="day-empty"></td>
     )

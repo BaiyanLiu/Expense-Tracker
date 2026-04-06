@@ -9,7 +9,12 @@ function Year({year, expenses}) {
 
     return (
         <div>
-            {MONTHS.map(month => <Month year={year} month={month} expenses={expenses?.get(month)}/>)}
+            {MONTHS.map(month =>
+                <Month
+                    key={month}
+                    year={year}
+                    month={month}
+                    expenses={expenses?.get(month)}/>)}
         </div>
     )
 }

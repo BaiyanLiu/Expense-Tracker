@@ -55,7 +55,11 @@ function Month({year, month, expenses}) {
                 </tr>
                 </thead>
                 <tbody>
-                    {weeks.map(week => <Week week={week} expenses={expenses}/>)}
+                    {weeks.map(week =>
+                        <Week
+                            key={weeks.indexOf(week)}
+                            week={week}
+                            expenses={expenses}/>)}
                 </tbody>
             </table>
         </div>

@@ -11,7 +11,7 @@ function Week({week, expenses}) {
         <tr>
             {DAYS.map(day => {
                 const date = week[day];
-                return <Day date={date} expenses={expenses?.get(date)}/>
+                return <Day key={day} date={date} expenses={expenses?.get(date)}/>
             })}
         </tr>
     );
