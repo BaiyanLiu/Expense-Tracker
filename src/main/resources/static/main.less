@@ -1,9 +1,17 @@
 @import "library";
 
 body {
-  background-color: black;
+  background-color: @primary-background-color;
   color: @primary-color;
   font-family: Arial, sans-serif;
+}
+
+input {
+  .border();
+}
+
+.invalid-input {
+  background-color: @negative-color-light;
 }
 
 .header {
@@ -111,6 +119,12 @@ body {
     &:hover {
       background-color: @positive-color-dark;
     }
+  }
+
+  .add-expense-disabled {
+    .add-expense-button();
+    background-color: @disabled-color;
+    cursor: not-allowed;
   }
 }
 
