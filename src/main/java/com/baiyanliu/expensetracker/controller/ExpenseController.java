@@ -8,13 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Log
@@ -33,11 +29,9 @@ public class ExpenseController {
         return ResponseEntity.ok(CollectionModel.of(expenses));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Expense>> getExpense(@PathVariable("id") Long id) {
-        log.info(String.format("getExpense - id [%d]", id));
-        Optional<Expense> expense = expenseRepository.findById(id);
-        return expense.map(value -> ResponseEntity.ok(EntityModel.of(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @PostMapping
+    public ResponseEntity<EntityModel<Expense>> createExpense(@RequestBody Expense expense) {
+        log.info("createExpense - " + expense);
+        return ResponseEntity.ok(EntityModel.of(expenseRepository.save(expense)));
     }
 }

@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import Expense from "./expense";
 import AddExpense from "./addExpense";
 
-function Day({date, expenses}) {
+function Day({year, month, date, expenses}) {
     const [isAddingExpense, setIsAddingExpense] = useState(false);
 
     const total = expenses?.reduce((total, expense) => total + expense.amount, 0).toFixed(2);
@@ -18,7 +18,7 @@ function Day({date, expenses}) {
                     {expenses &&
                         <span className={`day-header-total ${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span>}
                 </div>
-                {isAddingExpense && <AddExpense setIsAddingExpense={setIsAddingExpense}/>}
+                {isAddingExpense && <AddExpense year={year} month={month} date={date} setIsAddingExpense={setIsAddingExpense}/>}
                 {expenses?.map(expense => <Expense key={expense.id} expense={expense}/>)}
             </td>
             : <td className="day-empty"></td>

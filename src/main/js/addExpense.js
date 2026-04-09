@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from "react";
 
-function AddExpense({setIsAddingExpense}) {
+function AddExpense({year, month, date, setIsAddingExpense}) {
     const [type, setType] = useState("");
     const [isTypeValid, setIsTypeValid] = useState(false);
 
@@ -29,7 +29,12 @@ function AddExpense({setIsAddingExpense}) {
 
     const onSave = () => {
         if (isSaveEnabled) {
-            setIsAddingExpense(false);
+            const saveRequest = {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({type: {name: type}, amount: amount, date: new Date(year, month, date)}),
+            }
+            fetch("api/expense", saveRequest).then(() => setIsAddingExpense(false));
         }
     }
 

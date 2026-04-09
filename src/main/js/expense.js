@@ -10,7 +10,7 @@ function Expense({expense}) {
         <div>
             <div className="expense" onClick={() => setIsExpanded(!isExpanded)}>
                 <span className="expense-name">{expense.type.name}</span>
-                <span className={`expense-amount ${expense.amount >= 0 ? "positive" : "negative"}-amount`}>${expense.amount}</span>
+                <span className={`expense-amount ${expense.amount >= 0 ? "positive" : "negative"}-amount`}>${expense.amount.toFixed(2)}</span>
             </div>
             {isExpanded && <ExpenseData expense={expense}/>}
         </div>

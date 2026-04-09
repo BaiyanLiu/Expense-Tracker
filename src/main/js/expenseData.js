@@ -6,7 +6,7 @@ function ExpenseData({expense}) {
 
     return (
         <div className="expense-data">
-            <span>{expense.type.category}</span>
+            <span>{expense.type.category ?? "None"}</span>
         </div>
     )
 }

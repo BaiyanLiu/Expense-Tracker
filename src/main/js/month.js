@@ -58,6 +58,8 @@ function Month({year, month, expenses}) {
                     {weeks.map(week =>
                         <Week
                             key={weeks.indexOf(week)}
+                            year={year}
+                            month={month}
                             week={week}
                             expenses={expenses}/>)}
                 </tbody>
