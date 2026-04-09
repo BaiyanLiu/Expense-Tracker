@@ -1,13 +1,24 @@
 'use strict';
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import SockJsClient from "react-stomp";
 import Year from "./year";
 import YearHeader from "./yearHeader";
 
-function Calendar({expenses}) {
+function Calendar() {
+    const [expenses, setExpenses] = useState([]);
+    const [expensesByDate, setExpensesByDate] = useState(new Map());
+    const [years, setYears] = useState([]);
     const [activeYear, setActiveYear] = useState(new Date().getFullYear());
 
-    const getExpensesByDate = () => {
+    useEffect(() => {
+        fetch("api/expense/all")
+            .then(response => response.json())
+            .then(data => data._embedded.expenses)
+            .then(data => setExpenses(data));
+    }, [])
+
+    useEffect(() => {
         const expensesByDate = new Map();
 
         expenses.forEach(expense => {
@@ -33,15 +44,32 @@ function Calendar({expenses}) {
             expensesForMonth.get(date).push(expense);
         });
 
-        return expensesByDate;
-    }
+        setExpensesByDate(expensesByDate);
+    }, [expenses])
 
-    const expensesByDate = getExpensesByDate();
-    const years = Array.from(expensesByDate.keys());
-    years.sort();
+    useEffect(() => {
+        const years = Array.from(expensesByDate.keys());
+        years.sort();
+        setYears(years);
+    }, [expensesByDate])
+
+    const onExpenseMessage = (message) => {
+        const newExpenses = [...expenses];
+        const index = newExpenses.findIndex(expense => expense.id === message.expense.id);
+        if (index > -1) {
+            newExpenses[index] = message.expense;
+        } else {
+            newExpenses.push(message.expense);
+        }
+        setExpenses(newExpenses);
+    };
 
     return (
         <div>
+            <SockJsClient
+                url={'http://localhost:8080/events'}
+                topics={['/topic/expense']}
+                onMessage={message => onExpenseMessage(message)}/>
             {years.map(year =>
                 <YearHeader
                     key={year}

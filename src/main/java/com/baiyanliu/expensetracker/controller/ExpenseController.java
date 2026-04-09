@@ -2,6 +2,7 @@ package com.baiyanliu.expensetracker.controller;
 
 import com.baiyanliu.expensetracker.entity.Expense;
 import com.baiyanliu.expensetracker.entity.repository.ExpenseRepository;
+import com.baiyanliu.expensetracker.messaging.MessageFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.util.stream.StreamSupport;
 @RestController
 public class ExpenseController {
     private final ExpenseRepository expenseRepository;
+    private final MessageFactory messageFactory;
 
     @GetMapping("/all")
     public ResponseEntity<CollectionModel<EntityModel<Expense>>> getAllExpenses() {
@@ -32,6 +34,8 @@ public class ExpenseController {
     @PostMapping
     public ResponseEntity<EntityModel<Expense>> createExpense(@RequestBody Expense expense) {
         log.info("createExpense - " + expense);
-        return ResponseEntity.ok(EntityModel.of(expenseRepository.save(expense)));
+        expense = expenseRepository.save(expense);
+        messageFactory.createMessage(expense);
+        return ResponseEntity.ok(EntityModel.of(expense));
     }
 }
