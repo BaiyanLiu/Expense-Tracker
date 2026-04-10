@@ -16,7 +16,7 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
     }, [type])
 
     useEffect(() => {
-        setIsAmountValid(/^\d+(\.\d{2})?$/.test(amount));
+        setIsAmountValid(/^-?\d+(\.\d{2})?$/.test(amount));
     }, [amount])
 
     useEffect(() => {
@@ -24,7 +24,7 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
     }, [isTypeValid, isAmountValid])
 
     const onAmountChanged = (e) => {
-        setAmount(e.target.value.replace(/[^0-9.]/, ""));
+        setAmount(e.target.value.replace(/[^-0-9.]/, ""));
     }
 
     const onSave = () => {
