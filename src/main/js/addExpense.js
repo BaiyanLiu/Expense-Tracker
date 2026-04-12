@@ -1,27 +1,10 @@
 'use strict';
 
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 
 function AddExpense({year, month, date, setIsAddingExpense}) {
     const [type, setType] = useState("");
-    const [isTypeValid, setIsTypeValid] = useState(false);
-
     const [amount, setAmount] = useState("");
-    const [isAmountValid, setIsAmountValid] = useState(false);
-
-    const [isSaveEnabled, setIsSaveEnabled] = useState(false);
-
-    useEffect(() => {
-        setIsTypeValid(type.length > 0);
-    }, [type])
-
-    useEffect(() => {
-        setIsAmountValid(/^-?\d+(\.\d{2})?$/.test(amount));
-    }, [amount])
-
-    useEffect(() => {
-        setIsSaveEnabled(isTypeValid && isAmountValid);
-    }, [isTypeValid, isAmountValid])
 
     const onAmountChanged = (e) => {
         setAmount(e.target.value.replace(/[^-0-9.]/, ""));
@@ -37,6 +20,10 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
             fetch("api/expense", saveRequest).then(() => setIsAddingExpense(false));
         }
     }
+
+    const isTypeValid = type.length > 0;
+    const isAmountValid = /^-?\d+(\.\d{2})?$/.test(amount);
+    const isSaveEnabled = isTypeValid && isAmountValid;
 
     return (
         <div className="add-expense">

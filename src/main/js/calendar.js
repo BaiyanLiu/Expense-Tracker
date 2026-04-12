@@ -7,8 +7,6 @@ import YearHeader from "./yearHeader";
 
 function Calendar() {
     const [expenses, setExpenses] = useState([]);
-    const [expensesByDate, setExpensesByDate] = useState(new Map());
-    const [years, setYears] = useState([]);
     const [activeYear, setActiveYear] = useState(new Date().getFullYear());
 
     useEffect(() => {
@@ -18,7 +16,18 @@ function Calendar() {
             .then(data => setExpenses(data));
     }, [])
 
-    useEffect(() => {
+    const onExpenseMessage = (message) => {
+        const newExpenses = [...expenses];
+        const index = newExpenses.findIndex(expense => expense.id === message.expense.id);
+        if (index > -1) {
+            newExpenses[index] = message.expense;
+        } else {
+            newExpenses.push(message.expense);
+        }
+        setExpenses(newExpenses);
+    };
+
+    const getExpensesByDate = () => {
         const expensesByDate = new Map();
 
         expenses.forEach(expense => {
@@ -44,25 +53,12 @@ function Calendar() {
             expensesForMonth.get(date).push(expense);
         });
 
-        setExpensesByDate(expensesByDate);
-    }, [expenses])
+        return expensesByDate;
+    }
 
-    useEffect(() => {
-        const years = Array.from(expensesByDate.keys());
-        years.sort();
-        setYears(years);
-    }, [expensesByDate])
-
-    const onExpenseMessage = (message) => {
-        const newExpenses = [...expenses];
-        const index = newExpenses.findIndex(expense => expense.id === message.expense.id);
-        if (index > -1) {
-            newExpenses[index] = message.expense;
-        } else {
-            newExpenses.push(message.expense);
-        }
-        setExpenses(newExpenses);
-    };
+    const expensesByDate = getExpensesByDate();
+    const years = Array.from(expensesByDate.keys());
+    years.sort();
 
     return (
         <div>
