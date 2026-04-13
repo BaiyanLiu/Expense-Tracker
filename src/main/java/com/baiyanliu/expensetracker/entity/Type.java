@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class Type {
     @GeneratedValue @Id private long id;
     private String name;
-    private String category;
+    private Category category;
 
-    public Type(String name, String category) {
+    public Type(String name, Category category) {
         this.name = name;
         this.category = category;
     }
