@@ -1,5 +1,6 @@
 package com.baiyanliu.expensetracker.controller;
 
+import com.baiyanliu.expensetracker.entity.Category;
 import com.baiyanliu.expensetracker.entity.Expense;
 import com.baiyanliu.expensetracker.entity.repository.ExpenseRepository;
 import com.baiyanliu.expensetracker.messaging.MessageFactory;
@@ -11,6 +12,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -37,5 +39,14 @@ public class ExpenseController {
         expense = expenseRepository.save(expense);
         messageFactory.createMessage(expense);
         return ResponseEntity.ok(EntityModel.of(expense));
+    }
+
+    @GetMapping("/category/all")
+    public ResponseEntity<CollectionModel<EntityModel<Category>>> getAlCategories() {
+        log.info("getAlCategories");
+        List<EntityModel<Category>> categories = Arrays.stream(Category.values())
+                .map(EntityModel::of)
+                .toList();
+        return ResponseEntity.ok(CollectionModel.of(categories));
     }
 }

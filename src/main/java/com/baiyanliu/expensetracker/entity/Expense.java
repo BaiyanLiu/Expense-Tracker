@@ -15,12 +15,14 @@ import java.sql.Date;
 public class Expense {
     @GeneratedValue @Id private long id;
     private Date date;
+    private String name;
+    private Category category;
     private BigDecimal amount;
-    @ManyToOne(cascade = CascadeType.PERSIST) private Type type;
 
-    public Expense(Date date, BigDecimal amount, Type type) {
+    public Expense(Date date, String name, Category category, BigDecimal amount) {
         this.date = date;
+        this.name = name;
+        this.category = category;
         this.amount = amount;
-        this.type = type;
     }
 }

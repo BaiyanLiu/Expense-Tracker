@@ -2,7 +2,6 @@ package com.baiyanliu.expensetracker;
 
 import com.baiyanliu.expensetracker.entity.Category;
 import com.baiyanliu.expensetracker.entity.Expense;
-import com.baiyanliu.expensetracker.entity.Type;
 import com.baiyanliu.expensetracker.entity.repository.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,10 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         expenseRepository.saveAll(List.of(
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(6L)), BigDecimal.valueOf(-123.45d), new Type("type1", Category.BILLS)),
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), BigDecimal.valueOf(-123.45d), new Type("type1", Category.KIDS)),
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), BigDecimal.valueOf(234.56d), new Type("type2", Category.GROCERIES)),
-                new Expense(Date.valueOf(LocalDate.now().minusDays(1L)), BigDecimal.valueOf(234.56d), new Type("type2", Category.OTHER))
+                new Expense(Date.valueOf(LocalDate.now().minusMonths(6L)), "name1", Category.BILLS, BigDecimal.valueOf(-123.45d)),
+                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), "name2", Category.KIDS, BigDecimal.valueOf(-123.45d)),
+                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), "name3", Category.GROCERIES, BigDecimal.valueOf(234.56d)),
+                new Expense(Date.valueOf(LocalDate.now().minusDays(1L)), "name4", Category.OTHER, BigDecimal.valueOf(234.56d))
         ));
     }
 }
