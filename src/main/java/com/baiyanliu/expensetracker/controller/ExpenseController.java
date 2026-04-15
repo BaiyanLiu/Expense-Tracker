@@ -42,10 +42,10 @@ public class ExpenseController {
     }
 
     @GetMapping("/category/all")
-    public ResponseEntity<CollectionModel<EntityModel<Category>>> getAlCategories() {
-        log.info("getAlCategories");
-        List<EntityModel<Category>> categories = Arrays.stream(Category.values())
-                .map(EntityModel::of)
+    public ResponseEntity<CollectionModel<String>> getAllCategories() {
+        log.info("getAllCategories");
+        List<String> categories = Arrays.stream(Category.values())
+                .map(Category::name)
                 .toList();
         return ResponseEntity.ok(CollectionModel.of(categories));
     }
