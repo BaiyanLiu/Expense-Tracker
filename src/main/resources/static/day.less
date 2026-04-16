@@ -1,0 +1,40 @@
+@import "common";
+
+.day {
+  border: 1px solid @primary-color;
+  height: 125px;
+  vertical-align: top;
+
+  .header {
+    background-color: @highlight-color;
+    padding: 2px;
+    text-align: left;
+
+    .total {
+      float: right;
+    }
+
+    .add-expense {
+      .button-with-border();
+      background-color: @positive-color-darker;
+      display: none;
+      font-weight: bold;
+      margin: -1px 5px;
+      padding: 0 3px;
+
+      &:hover {
+        background-color: @positive-color-dark;
+      }
+    }
+
+    &:hover {
+      .add-expense {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.day-empty {
+  border: 0;
+}

@@ -11,7 +11,12 @@ function Week({year, month, week, expenses}) {
         <tr>
             {DAYS.map(day => {
                 const date = week[day];
-                return <Day key={day} year={year} month={month} date={date} expenses={expenses?.get(date)}/>
+                return <Day
+                    key={day}
+                    year={year}
+                    month={month}
+                    date={date}
+                    expenses={expenses?.get(date)}/>
             })}
         </tr>
     );

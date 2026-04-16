@@ -13,7 +13,9 @@ function YearHeader({year, expenses, isActive, setActiveYear}) {
     }
 
     return (
-        <h2 className={`year-header${isActive ? "-active" : ""}`} onClick={() => setActiveYear(year)}>{year} - ${getTotal()}</h2>
+        <h2 className={`year-header ${isActive ? "active" : ""}`} onClick={() => setActiveYear(year)}>
+            {year} - ${getTotal()}
+        </h2>
     );
 }
 

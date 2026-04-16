@@ -12,15 +12,26 @@ function Day({year, month, date, expenses}) {
     return (
         date
             ? <td className="day">
-                <div className="day-header">
+                <div className="header">
                     {date}
-                    <div className="add-expense-button" onClick={() => setIsAddingExpense(!isAddingExpense)}>+</div>
+                    <div className="add-expense" onClick={() => setIsAddingExpense(!isAddingExpense)}>
+                        +
+                    </div>
                     {expenses &&
-                        <span className={`day-header-total ${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span>}
+                        <span className={`total ${total >= 0 ? "positive" : "negative"}-amount`}>
+                            ${total}
+                        </span>}
                 </div>
-                {isAddingExpense && <AddExpense year={year} month={month} date={date} setIsAddingExpense={setIsAddingExpense}/>}
+
+                {isAddingExpense &&
+                    <AddExpense
+                        year={year}
+                        month={month}
+                        date={date}
+                        setIsAddingExpense={setIsAddingExpense}/>}
                 {expenses?.map(expense => <Expense key={expense.id} expense={expense}/>)}
             </td>
+
             : <td className="day-empty"></td>
     )
 }

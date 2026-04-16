@@ -1,0 +1,72 @@
+@import "common";
+
+.expense {
+  .button();
+  display: grid;
+  grid-template-columns: auto auto;
+  padding: 2px;
+
+  .name {
+    text-align: left;
+  }
+
+  .amount {
+    text-align: right;
+  }
+}
+
+.expense-data {
+  .border();
+  margin: 2px;
+}
+
+.add-expense {
+  .border();
+  margin: 2px;
+
+  & input, select {
+    margin: 2px;
+  }
+
+  & input {
+    width: calc(100% - 10px);
+  }
+
+  & select {
+    width: calc(100% - 4px);
+  }
+
+  .footer {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+
+  .button {
+    .button-with-border();
+    margin: 2px;
+  }
+
+  .cancel-button {
+    .button();
+    background-color: @negative-color-darker;
+
+    &:hover {
+      background-color: @negative-color-dark;
+    }
+  }
+
+  .save-button {
+    .button();
+    background-color: @positive-color-darker;
+
+    &:hover {
+      background-color: @positive-color-dark;
+    }
+  }
+
+  .disabled-button {
+    .button();
+    background-color: @disabled-color;
+    cursor: not-allowed;
+  }
+}
