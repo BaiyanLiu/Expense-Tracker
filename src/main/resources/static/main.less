@@ -41,13 +41,13 @@ input {
   & th, td {
     padding: 1px;
     text-align: center;
-    width: 150px;
+    width: 175px;
   }
 }
 
 .day {
   border: 1px solid @primary-color;
-  height: 100px;
+  height: 125px;
   vertical-align: top;
 
   .day-header {
@@ -88,16 +88,18 @@ input {
   .border();
   margin: 2px;
 
-  & input {
+  & input, select {
     margin: 2px;
-    width: 132px;
+  }
+
+  & input {
+    width: calc(100% - 10px);
   }
 
   & select {
     .border();
     background-color: @primary-color;
-    margin: 2px;
-    width: 138px;
+    width: calc(100% - 4px);
   }
 
   .add-expense-footer {
