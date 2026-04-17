@@ -95,7 +95,7 @@ function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
                 </div>
                 {onDeleted &&
                     <div className="delete-button" onClick={onDelete}>
-                        Delete
+                        X
                     </div>}
             </div>
         </div>
