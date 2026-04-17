@@ -15,12 +15,7 @@
   }
 }
 
-.expense-data {
-  .border();
-  margin: 2px;
-}
-
-.add-expense {
+.edit-expense {
   .border();
   margin: 2px;
 
@@ -39,6 +34,10 @@
   .footer {
     display: grid;
     grid-template-columns: auto auto;
+
+    &.with-delete {
+      grid-template-columns: auto auto auto;
+    }
   }
 
   .button {
@@ -48,10 +47,10 @@
 
   .cancel-button {
     .button();
-    background-color: @negative-color-darker;
+    background-color: @neutral-color-dark;
 
     &:hover {
-      background-color: @negative-color-dark;
+      background-color: @neutral-color;
     }
   }
 
@@ -61,6 +60,15 @@
 
     &:hover {
       background-color: @positive-color-dark;
+    }
+  }
+
+  .delete-button {
+    .button();
+    background-color: @negative-color-darker;
+
+    &:hover {
+      background-color: @negative-color-dark;
     }
   }
 

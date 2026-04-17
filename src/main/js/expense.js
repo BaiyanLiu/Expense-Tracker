@@ -1,20 +1,24 @@
 'use strict';
 
 import React, {useState} from "react";
-import ExpenseData from "./expenseData";
+import EditExpense from "./editExpense";
 
-function Expense({expense}) {
-    const [isExpanded, setIsExpanded] = useState(false);
+function Expense({expense, onDeleted}) {
+    const [isEditing, setIsEditing] = useState(false);
 
     return (
         <div>
-            <div className="expense" onClick={() => setIsExpanded(!isExpanded)}>
+            <div className="expense" onClick={() => setIsEditing(!isEditing)}>
                 <span className="name">{expense.name}</span>
                 <span className={`amount ${expense.amount >= 0 ? "positive" : "negative"}-amount`}>
                     ${expense.amount.toFixed(2)}
                 </span>
             </div>
-            {isExpanded && <ExpenseData expense={expense}/>}
+            {isEditing &&
+                <EditExpense
+                    expense={expense}
+                    onDeleted={onDeleted}
+                    closeForm={() => setIsEditing(false)}/>}
         </div>
     )
 }

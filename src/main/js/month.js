@@ -5,7 +5,7 @@ import Week from "./week";
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function Month({year, month, expenses}) {
+function Month({year, month, expenses, onExpenseDeleted}) {
 
     const getWeeks = () => {
         const finalDate = new Date(year, month + 1, 0).getUTCDate();
@@ -61,7 +61,8 @@ function Month({year, month, expenses}) {
                             year={year}
                             month={month}
                             week={week}
-                            expenses={expenses}/>)}
+                            expenses={expenses}
+                            onExpenseDeleted={onExpenseDeleted}/>)}
                 </tbody>
             </table>
         </div>

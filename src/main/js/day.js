@@ -2,9 +2,9 @@
 
 import React, {useState} from "react";
 import Expense from "./expense";
-import AddExpense from "./addExpense";
+import EditExpense from "./editExpense";
 
-function Day({year, month, date, expenses}) {
+function Day({year, month, date, expenses, onExpenseDeleted}) {
     const [isAddingExpense, setIsAddingExpense] = useState(false);
 
     const total = expenses?.reduce((total, expense) => total + expense.amount, 0).toFixed(2);
@@ -24,12 +24,16 @@ function Day({year, month, date, expenses}) {
                 </div>
 
                 {isAddingExpense &&
-                    <AddExpense
+                    <EditExpense
                         year={year}
                         month={month}
                         date={date}
-                        setIsAddingExpense={setIsAddingExpense}/>}
-                {expenses?.map(expense => <Expense key={expense.id} expense={expense}/>)}
+                        closeForm={() => setIsAddingExpense(false)}/>}
+                {expenses?.map(expense =>
+                    <Expense
+                        key={expense.id}
+                        expense={expense}
+                        onDeleted={() => onExpenseDeleted(expense.id)}/>)}
             </td>
 
             : <td className="day-empty"></td>

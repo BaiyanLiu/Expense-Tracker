@@ -36,9 +36,26 @@ public class ExpenseController {
     @PostMapping
     public ResponseEntity<EntityModel<Expense>> createExpense(@RequestBody Expense expense) {
         log.info("createExpense - " + expense);
+        return ResponseEntity.ok(EntityModel.of(upsertExpense(expense)));
+    }
+
+    @PutMapping
+    public ResponseEntity<EntityModel<Expense>> updateExpense(@RequestBody Expense expense) {
+        log.info("updateExpense - " + expense);
+        return ResponseEntity.ok(EntityModel.of(upsertExpense(expense)));
+    }
+
+    private Expense upsertExpense(Expense expense) {
         expense = expenseRepository.save(expense);
         messageFactory.createMessage(expense);
-        return ResponseEntity.ok(EntityModel.of(expense));
+        return expense;
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Long> deleteExpense(@RequestBody long id) {
+        log.info("deleteExpense - " + id);
+        expenseRepository.deleteById(id);
+        return ResponseEntity.ok(id);
     }
 
     @GetMapping("/category/all")

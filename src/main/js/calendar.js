@@ -27,6 +27,10 @@ function Calendar() {
         setExpenses(newExpenses);
     };
 
+    const onExpenseDeleted = (id) => {
+        setExpenses(expenses.filter(expense => expense.id !== id));
+    }
+
     const getExpensesByDate = () => {
         const expensesByDate = new Map();
 
@@ -75,7 +79,8 @@ function Calendar() {
                     setActiveYear={setActiveYear}/>)}
             <Year
                 year={activeYear}
-                expenses={expensesByDate.get(activeYear)}/>
+                expenses={expensesByDate.get(activeYear)}
+                onExpenseDeleted={onExpenseDeleted}/>
         </div>
     );
 }

@@ -10,7 +10,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,10 +21,10 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         expenseRepository.saveAll(List.of(
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(6L)), "name1", Category.BILLS, BigDecimal.valueOf(-123.45d)),
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), "name2", Category.KIDS, BigDecimal.valueOf(-123.45d)),
-                new Expense(Date.valueOf(LocalDate.now().minusMonths(1L)), "name3", Category.GROCERIES, BigDecimal.valueOf(234.56d)),
-                new Expense(Date.valueOf(LocalDate.now().minusDays(1L)), "name4", Category.OTHER, BigDecimal.valueOf(234.56d))
+                new Expense(LocalDate.now().minusMonths(6L), "name1", Category.BILLS, BigDecimal.valueOf(-123.45d)),
+                new Expense(LocalDate.now().minusMonths(1L), "name2", Category.KIDS, BigDecimal.valueOf(-123.45d)),
+                new Expense(LocalDate.now().minusMonths(1L), "name3", Category.GROCERIES, BigDecimal.valueOf(234.56d)),
+                new Expense(LocalDate.now().minusDays(1L), "name4", Category.OTHER, BigDecimal.valueOf(234.56d))
         ));
     }
 }

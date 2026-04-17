@@ -2,10 +2,10 @@
 
 import React, {useEffect, useState} from "react";
 
-function AddExpense({year, month, date, setIsAddingExpense}) {
-    const [name, setName] = useState("");
-    const [category, setCategory] = useState("");
-    const [amount, setAmount] = useState("");
+function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
+    const [name, setName] = useState(expense?.name ?? "");
+    const [category, setCategory] = useState(expense?.category ?? "");
+    const [amount, setAmount] = useState(expense?.amount ?? "");
 
     const [categories, setCategories] = useState([]);
 
@@ -15,7 +15,7 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
             .then(data => data._embedded.strings)
             .then(data => {
                 setCategories(data);
-                setCategory(data[0]);
+                setCategory(expense?.category ?? data[0]);
             });
     }, [])
 
@@ -25,17 +25,38 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
 
     const onSave = () => {
         if (isSaveEnabled) {
-            const request = {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    date: new Date(year, month, date),
-                    name: name,
-                    category: category,
-                    amount: amount}),
+            const payload = {
+                date: expense?.date ?? new Date(year, month, date),
+                name: name,
+                category: category,
+                amount: amount,
             }
-            fetch("api/expense", request).then(() => setIsAddingExpense(false));
+            if (expense) {
+                payload.id = expense.id;
+            }
+
+            const request = {
+                method: expense ? "PUT" : "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload),
+            }
+            fetch("api/expense", request).then(() => closeForm());
         }
+    }
+
+    const onDelete = () => {
+        const request = {
+            method: "DELETE",
+            headers: {'Content-Type': 'application/json'},
+            body: expense.id,
+        }
+        fetch("api/expense", request)
+            .then(response => {
+                if (response.ok) {
+                    onDeleted();
+                }
+                closeForm()
+            });
     }
 
     const isNameValid = name.length > 0;
@@ -43,7 +64,7 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
     const isSaveEnabled = isNameValid && isAmountValid;
 
     return (
-        <div className="add-expense">
+        <div className="edit-expense">
             <input
                 className={isNameValid ? "" : "invalid"}
                 type="text"
@@ -51,9 +72,9 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}/>
 
-            <select onChange={(e) => setCategory(e.target.value)}>
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 {categories.map(category =>
-                    <option value={category}>
+                    <option key={category} value={category}>
                         {category.charAt(0) + category.slice(1).toLowerCase()}
                     </option>)}
             </select>
@@ -65,16 +86,20 @@ function AddExpense({year, month, date, setIsAddingExpense}) {
                 value={amount}
                 onChange={onAmountChanged}/>
 
-            <div className="footer">
-                <div className="cancel-button" onClick={() => setIsAddingExpense(false)}>
+            <div className={`footer ${onDeleted ? "with-delete" : ""}`}>
+                <div className="cancel-button" onClick={closeForm}>
                     Cancel
                 </div>
                 <div className={`${isSaveEnabled ? "save" : "disabled"}-button`} onClick={onSave}>
                     Save
                 </div>
+                {onDeleted &&
+                    <div className="delete-button" onClick={onDelete}>
+                        Delete
+                    </div>}
             </div>
         </div>
     );
 }
 
-export default AddExpense;
+export default EditExpense;
