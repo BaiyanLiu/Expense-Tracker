@@ -12,7 +12,7 @@ function Week({year, month, week, expenses}) {
             {DAYS.map(day => {
                 const date = week[day];
                 return <Day
-                    key={day}
+                    key={`${year}_${day}`}
                     year={year}
                     month={month}
                     date={date}

@@ -44,15 +44,15 @@ function Month({year, month, expenses}) {
             <h3>{MONTH_NAMES[month]} - <span className={`${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span></h3>
             <table>
                 <thead>
-                <tr>
-                    <th>Sunday</th>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                    <th>Saturday</th>
-                </tr>
+                    <tr>
+                        <th>Sunday</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {weeks.map(week =>
