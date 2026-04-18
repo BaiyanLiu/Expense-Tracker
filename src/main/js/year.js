@@ -5,7 +5,7 @@ import Month from "./month";
 
 const MONTHS = Array.from({length: 12}, (_, i) => i);
 
-function Year({year, expenses, onExpenseDeleted}) {
+function Year({year, expenses, notes, onExpenseDeleted}) {
 
     return (
         <div>
@@ -15,6 +15,7 @@ function Year({year, expenses, onExpenseDeleted}) {
                     year={year}
                     month={month}
                     expenses={expenses?.get(month)}
+                    note={notes?.get(month)}
                     onExpenseDeleted={onExpenseDeleted}/>)}
         </div>
     )

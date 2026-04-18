@@ -8,12 +8,18 @@ import YearHeader from "./yearHeader";
 function Calendar() {
     const [expenses, setExpenses] = useState([]);
     const [activeYear, setActiveYear] = useState(new Date().getFullYear());
+    const [notes, setNotes] = useState([]);
 
     useEffect(() => {
         fetch("api/expense/all")
             .then(response => response.json())
             .then(data => data._embedded.expenses)
             .then(data => setExpenses(data));
+
+        fetch("api/note/all")
+            .then(response => response.json())
+            .then(data => data._embedded.notes)
+            .then(data => setNotes(data));
     }, [])
 
     const onExpenseMessage = (message) => {
@@ -60,7 +66,22 @@ function Calendar() {
         return expensesByDate;
     }
 
+    const getNotesByMonth = () => {
+        const notesByMonth = new Map();
+
+        notes.forEach(note => {
+            const year = note.year;
+            if (!notesByMonth.has(year)) {
+                notesByMonth.set(year, new Map());
+            }
+            notesByMonth.get(year).set(note.month, note);
+        });
+
+        return notesByMonth;
+    }
+
     const expensesByDate = getExpensesByDate();
+    const notesByMonth = getNotesByMonth();
     const years = Array.from(expensesByDate.keys());
     years.sort();
 
@@ -80,6 +101,7 @@ function Calendar() {
             <Year
                 year={activeYear}
                 expenses={expensesByDate.get(activeYear)}
+                notes={notesByMonth.get(activeYear)}
                 onExpenseDeleted={onExpenseDeleted}/>
         </div>
     );

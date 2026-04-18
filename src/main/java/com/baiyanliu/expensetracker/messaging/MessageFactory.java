@@ -1,6 +1,7 @@
 package com.baiyanliu.expensetracker.messaging;
 
 import com.baiyanliu.expensetracker.entity.Expense;
+import com.baiyanliu.expensetracker.entity.Note;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -13,5 +14,9 @@ public class MessageFactory {
 
     public void createMessage(Expense expense) {
         new ExpenseMessage(expense).send(webSocket);
+    }
+
+    public void createMessage(Note note) {
+        new NoteMessage(note).send(webSocket);
     }
 }

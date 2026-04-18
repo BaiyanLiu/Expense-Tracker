@@ -1,6 +1,7 @@
 package com.baiyanliu.expensetracker.configuration;
 
 import com.baiyanliu.expensetracker.entity.Expense;
+import com.baiyanliu.expensetracker.entity.Note;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -12,5 +13,6 @@ class RestConfiguration implements RepositoryRestConfigurer {
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         config.exposeIdsFor(Expense.class);
+        config.exposeIdsFor(Note.class);
     }
 }

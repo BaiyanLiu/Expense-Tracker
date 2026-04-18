@@ -5,7 +5,7 @@ import Week from "./week";
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function Month({year, month, expenses, onExpenseDeleted}) {
+function Month({year, month, expenses, note, onExpenseDeleted}) {
 
     const getWeeks = () => {
         const finalDate = new Date(year, month + 1, 0).getUTCDate();
@@ -45,6 +45,7 @@ function Month({year, month, expenses, onExpenseDeleted}) {
                 {MONTH_NAMES[month]} -&nbsp;
                 <span className={`${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span>
             </h3>
+            {note && <h4>{`Paid=${note.paid} Note=${note.text}`}</h4>}
             <table>
                 <thead>
                     <tr>
