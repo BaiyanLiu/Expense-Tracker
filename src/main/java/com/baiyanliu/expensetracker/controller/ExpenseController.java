@@ -4,7 +4,6 @@ import com.baiyanliu.expensetracker.entity.Category;
 import com.baiyanliu.expensetracker.entity.Expense;
 import com.baiyanliu.expensetracker.entity.repository.ExpenseRepository;
 import com.baiyanliu.expensetracker.messaging.MessageFactory;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -14,41 +13,42 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @Log
 @RequestMapping("/api/expense")
-@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 @RestController
-public class ExpenseController {
+public class ExpenseController extends CrudController<Expense> {
     private final ExpenseRepository expenseRepository;
     private final MessageFactory messageFactory;
+
+    @Autowired
+    private ExpenseController(ExpenseRepository expenseRepository, MessageFactory messageFactory) {
+        super(expenseRepository);
+        this.expenseRepository = expenseRepository;
+        this.messageFactory = messageFactory;
+    }
 
     @GetMapping("/all")
     public ResponseEntity<CollectionModel<EntityModel<Expense>>> getAllExpenses() {
         log.info("getAllExpenses");
-        List<EntityModel<Expense>> expenses = StreamSupport.stream(expenseRepository.findAll().spliterator(), false)
-                .map(EntityModel::of)
-                .toList();
-        return ResponseEntity.ok(CollectionModel.of(expenses));
+        return getAll();
     }
 
     @PostMapping
     public ResponseEntity<EntityModel<Expense>> createExpense(@RequestBody Expense expense) {
         log.info("createExpense - " + expense);
-        return ResponseEntity.ok(EntityModel.of(upsertExpense(expense)));
+        return create(expense);
     }
 
     @PutMapping
     public ResponseEntity<EntityModel<Expense>> updateExpense(@RequestBody Expense expense) {
         log.info("updateExpense - " + expense);
-        return ResponseEntity.ok(EntityModel.of(upsertExpense(expense)));
+        return update(expense);
     }
 
-    private Expense upsertExpense(Expense expense) {
-        expense = expenseRepository.save(expense);
+    @Override
+    void onUpserted(Expense expense) {
         messageFactory.createMessage(expense);
-        return expense;
     }
 
     @DeleteMapping

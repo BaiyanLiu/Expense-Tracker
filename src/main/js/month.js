@@ -41,7 +41,10 @@ function Month({year, month, expenses, onExpenseDeleted}) {
 
     return (
         <div className="month">
-            <h3>{MONTH_NAMES[month]} - <span className={`${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span></h3>
+            <h3>
+                {MONTH_NAMES[month]} -&nbsp;
+                <span className={`${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span>
+            </h3>
             <table>
                 <thead>
                     <tr>
