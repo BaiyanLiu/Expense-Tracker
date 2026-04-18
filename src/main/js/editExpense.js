@@ -1,6 +1,8 @@
 'use strict';
 
 import React, {useEffect, useState} from "react";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faFloppyDisk, faRotateLeft, faTrashCan} from '@fortawesome/free-solid-svg-icons'
 
 function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
     const [name, setName] = useState(expense?.name ?? "");
@@ -88,14 +90,14 @@ function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
 
             <div className={`footer ${onDeleted ? "with-delete" : ""}`}>
                 <div className="cancel-button" onClick={closeForm}>
-                    Cancel
+                    <FontAwesomeIcon icon={faRotateLeft} size="xs"/>Cancel
                 </div>
                 <div className={`${isSaveEnabled ? "save" : "disabled"}-button`} onClick={onSave}>
-                    Save
+                    <FontAwesomeIcon icon={faFloppyDisk} size="xs"/>Save
                 </div>
                 {onDeleted &&
                     <div className="delete-button" onClick={onDelete}>
-                        X
+                        <FontAwesomeIcon icon={faTrashCan} size="xs"/>
                     </div>}
             </div>
         </div>

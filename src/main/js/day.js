@@ -3,6 +3,8 @@
 import React, {useState} from "react";
 import Expense from "./expense";
 import EditExpense from "./editExpense";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
 
 function Day({year, month, date, expenses, onExpenseDeleted}) {
     const [isAddingExpense, setIsAddingExpense] = useState(false);
@@ -15,7 +17,7 @@ function Day({year, month, date, expenses, onExpenseDeleted}) {
                 <div className="header">
                     {date}
                     <div className="add-expense" onClick={() => setIsAddingExpense(!isAddingExpense)}>
-                        +
+                        <FontAwesomeIcon icon={faPlus} size="sm"/>
                     </div>
                     {expenses &&
                         <span className={`total ${total >= 0 ? "positive" : "negative"}-amount`}>
