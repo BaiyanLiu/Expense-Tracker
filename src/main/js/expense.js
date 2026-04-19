@@ -10,7 +10,7 @@ function Expense({expense, onDeleted}) {
         <div>
             <div className="expense" onClick={() => setIsEditing(!isEditing)}>
                 <span className="name">{expense.name}</span>
-                <span className={`amount ${expense.amount >= 0 ? "positive" : "negative"}-amount`}>
+                <span className={`amount ${expense.amount >= 0 ? "positive" : "negative"}-text`}>
                     ${expense.amount.toFixed(2)}
                 </span>
             </div>

@@ -88,7 +88,7 @@ function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
                 value={amount}
                 onChange={onAmountChanged}/>
 
-            <div className={`footer ${onDeleted ? "with-delete" : ""}`}>
+            <div className={`${onDeleted ? "three" : "two"}-columns`}>
                 <div className="cancel-button" onClick={closeForm}>
                     <FontAwesomeIcon icon={faRotateLeft} size="xs"/>Cancel
                 </div>

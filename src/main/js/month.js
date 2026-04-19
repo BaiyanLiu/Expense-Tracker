@@ -1,11 +1,23 @@
 'use strict';
 
-import React from "react";
+import React, {useEffect} from "react";
 import Week from "./week";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCircleCheck, faCircleXmark, faFloppyDisk} from '@fortawesome/free-solid-svg-icons'
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 function Month({year, month, expenses, note, onExpenseDeleted}) {
+    const [paid, setPaid] = React.useState(false);
+    const [noteText, setNoteText] = React.useState("");
+    const [noteChanged, setNoteChanged] = React.useState(false);
+
+    useEffect(() => {
+        if (note) {
+            setPaid(note.paid);
+            setNoteText(note.text);
+        }
+    }, [note])
 
     const getWeeks = () => {
         const finalDate = new Date(year, month + 1, 0).getUTCDate();
@@ -33,7 +45,16 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
         let total = 0;
         expenses?.forEach((date, _0, _1) =>
             total += date.reduce((total, expense) => total + expense.amount, 0))
-        return total.toFixed(2);
+        return total;
+    }
+
+    const onNoteChanged = (e) => {
+        setNoteText(e.target.value);
+        setNoteChanged(true);
+    }
+
+    const onSaveNote = () => {
+
     }
 
     const weeks = getWeeks();
@@ -43,9 +64,25 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
         <div className="month">
             <h3>
                 {MONTH_NAMES[month]} -&nbsp;
-                <span className={`${total >= 0 ? "positive" : "negative"}-amount`}>${total}</span>
+                <span className={`${total >= 0 ? "positive" : "negative"}-text`}>${total.toFixed(2)}</span>
             </h3>
-            {note && <h4>{`Paid=${note.paid} Note=${note.text}`}</h4>}
+            {total < 0 &&
+                <span className="note">
+                    <span className={`button ${paid ? "positive" : "negative"}-text`} onClick={() => setPaid(!paid)}>
+                        <FontAwesomeIcon icon={paid ? faCircleCheck : faCircleXmark} size="sm"/>Paid
+                    </span>
+                    {paid &&
+                        <>
+                            <span className="text">
+                                <input type="text" placeholder="Notes" size="30" value={noteText} onChange={onNoteChanged}/>
+                            </span>
+                            {noteChanged &&
+                                <span className="save-button" onClick={onSaveNote}>
+                                    <FontAwesomeIcon icon={faFloppyDisk} size="xs"/>
+                                </span>}
+                        </>}
+                </span>}
+
             <table>
                 <thead>
                     <tr>

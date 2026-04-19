@@ -6,19 +6,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-input {
-  .border();
-
-  &.invalid {
-    background-color: @negative-color-light;
-  }
-}
-
-select {
-  .border();
-  background-color: @primary-color;
-}
-
 .header {
   text-align: center;
 }
@@ -41,17 +28,33 @@ select {
 }
 
 .month {
+  & h3 {
+    display: inline-block;
+  }
+
   & th, td {
     padding: 1px;
     text-align: center;
     width: 175px;
   }
-}
 
-.positive-amount {
-  color: @positive-color;
-}
+  .note {
+    margin-left: 10px;
+    vertical-align: center;
 
-.negative-amount {
-  color: @negative-color;
+    .text {
+      margin-left: 10px;
+    }
+
+    .save-button {
+      .button-with-border();
+      background-color: @positive-color-darker;
+      margin-left: 10px;
+      padding: 0 1px;
+
+      &:hover {
+        background-color: @positive-color-dark;
+      }
+    }
+  }
 }

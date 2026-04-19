@@ -20,7 +20,7 @@ function Day({year, month, date, expenses, onExpenseDeleted}) {
                         <FontAwesomeIcon icon={faPlus} size="sm"/>
                     </div>
                     {expenses &&
-                        <span className={`total ${total >= 0 ? "positive" : "negative"}-amount`}>
+                        <span className={`total ${total >= 0 ? "positive" : "negative"}-text`}>
                             ${total}
                         </span>}
                 </div>

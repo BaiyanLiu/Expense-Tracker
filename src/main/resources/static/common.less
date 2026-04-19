@@ -14,6 +14,19 @@
 @positive-color-dark: darken(@positive-color, 20%);
 @positive-color-darker: darken(@positive-color-dark, 10%);
 
+input {
+  .border();
+
+  &.invalid {
+    background-color: @negative-color-light;
+  }
+}
+
+select {
+  .border();
+  background-color: @primary-color;
+}
+
 .button {
   cursor: pointer;
   text-decoration: none;
@@ -27,4 +40,22 @@
 .button-with-border {
   .button();
   .border();
+}
+
+.positive-text {
+  color: @positive-color;
+}
+
+.negative-text {
+  color: @negative-color;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.three-columns {
+  display: grid;
+  grid-template-columns: auto auto auto;
 }
