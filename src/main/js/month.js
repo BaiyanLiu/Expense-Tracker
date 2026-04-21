@@ -48,13 +48,38 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
         return total;
     }
 
+    const saveNote = (data, onSavedHandler) => {
+        const payload = {
+            ...note,
+            ...data,
+            year: year,
+            month: month,
+        }
+
+        const request = {
+            method: note ? "PUT" : "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload),
+        }
+        fetch("api/note", request)
+            .then(response => {
+                if (response.ok) {
+                    onSavedHandler();
+                }
+            });
+    }
+
+    const onPaidChanged = () => {
+        saveNote({paid: !paid}, () => setPaid(!paid));
+    }
+
     const onNoteChanged = (e) => {
         setNoteText(e.target.value);
         setNoteChanged(true);
     }
 
     const onSaveNote = () => {
-
+        saveNote({text: noteText}, () => setNoteChanged(false));
     }
 
     const weeks = getWeeks();
@@ -68,7 +93,7 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
             </h3>
             {total < 0 &&
                 <span className="note">
-                    <span className={`button ${paid ? "positive" : "negative"}-text`} onClick={() => setPaid(!paid)}>
+                    <span className={`button ${paid ? "positive" : "negative"}-text`} onClick={onPaidChanged}>
                         <FontAwesomeIcon icon={paid ? faCircleCheck : faCircleXmark} size="sm"/>Paid
                     </span>
                     {paid &&
