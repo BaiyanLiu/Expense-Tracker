@@ -22,16 +22,16 @@ function Calendar() {
             .then(data => setNotes(data));
     }, [])
 
-    const onExpenseMessage = (message) => {
-        const newExpenses = [...expenses];
-        const index = newExpenses.findIndex(expense => expense.id === message.expense.id);
+    const onMessage = (payload, entities, setEntities) => {
+        const newEntities = [...entities];
+        const index = newEntities.findIndex(entity => entity.id === payload.id);
         if (index > -1) {
-            newExpenses[index] = message.expense;
+            newEntities[index] = payload;
         } else {
-            newExpenses.push(message.expense);
+            newEntities.push(payload);
         }
-        setExpenses(newExpenses);
-    };
+        setEntities(newEntities);
+    }
 
     const onExpenseDeleted = (id) => {
         setExpenses(expenses.filter(expense => expense.id !== id));
@@ -90,7 +90,11 @@ function Calendar() {
             <SockJsClient
                 url={'http://localhost:8080/events'}
                 topics={['/topic/expense']}
-                onMessage={message => onExpenseMessage(message)}/>
+                onMessage={message => onMessage(message.expense, expenses, setExpenses)}/>
+            <SockJsClient
+                url={'http://localhost:8080/events'}
+                topics={['/topic/note']}
+                onMessage={message => onMessage(message.note, notes, setNotes)}/>
             {years.map(year =>
                 <YearHeader
                     key={year}
