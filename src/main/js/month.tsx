@@ -99,7 +99,7 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
                     {paid &&
                         <>
                             <span className="text">
-                                <input type="text" placeholder="Notes" size="30" value={noteText} onChange={onNoteChanged}/>
+                                <input type="text" placeholder="Notes" size={30} value={noteText} onChange={onNoteChanged}/>
                             </span>
                             {noteChanged &&
                                 <span className="save-button" onClick={onSaveNote}>

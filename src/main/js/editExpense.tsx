@@ -34,6 +34,7 @@ function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
                 amount: amount,
             }
             if (expense) {
+                // @ts-expect-error
                 payload.id = expense.id;
             }
 

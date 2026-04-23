@@ -7,7 +7,9 @@ import Calendar from "./calendar";
 function App() {
     return (
         <div className="calendar">
-            <Calendar/>
+            <React.StrictMode>
+                <Calendar/>
+            </React.StrictMode>
         </div>
     )
 }

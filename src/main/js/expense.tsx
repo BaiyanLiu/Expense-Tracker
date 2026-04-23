@@ -15,6 +15,7 @@ function Expense({expense, onDeleted}) {
                 </span>
             </div>
             {isEditing &&
+                // @ts-expect-error
                 <EditExpense
                     expense={expense}
                     onDeleted={onDeleted}

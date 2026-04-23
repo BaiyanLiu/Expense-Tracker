@@ -14,17 +14,18 @@
     "react-stomp": "^5.1.0",
     "rest": "^2.0.0",
     "@fortawesome/react-fontawesome": "^3.3.0",
-    "@fortawesome/free-solid-svg-icons": "^7.2.0"
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "typescript": "^6.0.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@tsconfig/recommended": "^1.0.13"
   },
   "scripts": {
     "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1",
-    "@babel/preset-env": "^7.27.1",
-    "@babel/preset-react": "^7.27.1",
-    "babel-loader": "^10.0.0",
     "webpack": "^5.99.7",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "ts-loader": "^9.5.7"
   }
 }

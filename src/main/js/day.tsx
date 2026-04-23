@@ -26,6 +26,7 @@ function Day({year, month, date, expenses, onExpenseDeleted}) {
                 </div>
 
                 {isAddingExpense &&
+                    // @ts-expect-error
                     <EditExpense
                         year={year}
                         month={month}
