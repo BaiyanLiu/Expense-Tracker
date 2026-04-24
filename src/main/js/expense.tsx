@@ -2,9 +2,14 @@
 
 import React, {useState} from "react";
 import EditExpense from "./editExpense";
+import {ExpenseType} from "./calendar";
 
-function Expense({expense, onDeleted}) {
-    const [isEditing, setIsEditing] = useState(false);
+function Expense({expense, onDeleted}: {
+    expense: ExpenseType;
+    onDeleted: () => void;
+}) {
+
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
     return (
         <div>
@@ -15,7 +20,6 @@ function Expense({expense, onDeleted}) {
                 </span>
             </div>
             {isEditing &&
-                // @ts-expect-error
                 <EditExpense
                     expense={expense}
                     onDeleted={onDeleted}

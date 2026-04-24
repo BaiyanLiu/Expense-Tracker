@@ -2,15 +2,23 @@
 
 import React, {useEffect} from "react";
 import Week from "./week";
+import {ExpenseType, NoteType} from "./calendar";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCircleCheck, faCircleXmark, faFloppyDisk} from '@fortawesome/free-solid-svg-icons'
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function Month({year, month, expenses, note, onExpenseDeleted}) {
-    const [paid, setPaid] = React.useState(false);
-    const [noteText, setNoteText] = React.useState("");
-    const [noteChanged, setNoteChanged] = React.useState(false);
+function Month({year, month, expenses, note, onExpenseDeleted}: {
+    year: number,
+    month: number,
+    expenses?: Map<number, ExpenseType[]>,
+    note?: NoteType,
+    onExpenseDeleted: (id: string) => void
+}) {
+
+    const [paid, setPaid] = React.useState<boolean>(false);
+    const [noteText, setNoteText] = React.useState<string>("");
+    const [noteChanged, setNoteChanged] = React.useState<boolean>(false);
 
     useEffect(() => {
         if (note) {
@@ -19,11 +27,11 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
         }
     }, [note])
 
-    const getWeeks = () => {
+    const getWeeks = (): {[_: number]: number}[] => {
         const finalDate = new Date(year, month + 1, 0).getUTCDate();
 
         const weeks = [];
-        let currentWeek = {};
+        let currentWeek: {[_: number]: number} = {};
         let currentDay = new Date(year, month, 1).getUTCDay();
 
         for (let date = 1; date <= finalDate; date++) {
@@ -41,14 +49,14 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
         return weeks;
     }
 
-    const getTotal = () => {
+    const getTotal = (): number => {
         let total = 0;
         expenses?.forEach((date, _0, _1) =>
             total += date.reduce((total, expense) => total + expense.amount, 0))
         return total;
     }
 
-    const saveNote = (data, onSavedHandler) => {
+    const saveNote = (data: any, onSavedHandler: () => void): void => {
         const payload = {
             ...note,
             ...data,
@@ -69,16 +77,16 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
             });
     }
 
-    const onPaidChanged = () => {
+    const onPaidChanged = (): void => {
         saveNote({paid: !paid}, () => setPaid(!paid));
     }
 
-    const onNoteChanged = (e) => {
+    const onNoteChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setNoteText(e.target.value);
         setNoteChanged(true);
     }
 
-    const onSaveNote = () => {
+    const onSaveNote = (): void => {
         saveNote({text: noteText}, () => setNoteChanged(false));
     }
 
@@ -121,14 +129,16 @@ function Month({year, month, expenses, note, onExpenseDeleted}) {
                     </tr>
                 </thead>
                 <tbody>
-                    {weeks.map(week =>
-                        <Week
-                            key={weeks.indexOf(week)}
-                            year={year}
-                            month={month}
-                            week={week}
-                            expenses={expenses}
-                            onExpenseDeleted={onExpenseDeleted}/>)}
+                {weeks.map(week => {
+                    // noinspection HtmlUnknownAttribute
+                    return <Week
+                        key={weeks.indexOf(week)}
+                        year={year}
+                        month={month}
+                        week={week}
+                        expenses={expenses}
+                        onExpenseDeleted={onExpenseDeleted}/>;
+                })}
                 </tbody>
             </table>
         </div>

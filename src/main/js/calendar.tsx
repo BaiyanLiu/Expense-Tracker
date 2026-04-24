@@ -1,43 +1,44 @@
 'use strict';
 
 import React, {useEffect, useState} from "react";
+//@ts-expect-error
 import SockJsClient from "react-stomp";
 import Year from "./year";
 import YearHeader from "./yearHeader";
 
 function Calendar() {
-    const [expenses, setExpenses] = useState([]);
-    const [activeYear, setActiveYear] = useState(new Date().getFullYear());
-    const [notes, setNotes] = useState([]);
+    const [expenses, setExpenses] = useState<ExpenseType[]>([]);
+    const [activeYear, setActiveYear] = useState<number>(new Date().getFullYear());
+    const [notes, setNotes] = useState<NoteType[]>([]);
 
     useEffect(() => {
         fetch("api/expense/all")
             .then(response => response.json())
             .then(data => data._embedded.expenses)
-            .then(data => setExpenses(data));
+            .then((data: ExpenseType[]) => setExpenses(data));
 
         fetch("api/note/all")
             .then(response => response.json())
             .then(data => data._embedded.notes)
-            .then(data => setNotes(data));
+            .then((data: NoteType[]) => setNotes(data));
     }, [])
 
-    const onExpenseMessage = (payload) => {
+    const onExpenseMessage = (newExpense: ExpenseType): void => {
         const newExpenses = [...expenses];
-        const index = newExpenses.findIndex(expense => expense.id === payload.expense.id);
+        const index = newExpenses.findIndex(expense => expense.id === newExpense.id);
         if (index > -1) {
-            newExpenses[index] = payload.expense;
+            newExpenses[index] = newExpense;
         } else {
-            newExpenses.push(payload.expense);
+            newExpenses.push(newExpense);
         }
         setExpenses(newExpenses);
     }
 
-    const onExpenseDeleted = (id) => {
+    const onExpenseDeleted = (id: string): void => {
         setExpenses(expenses.filter(expense => expense.id !== id));
     }
 
-    const getExpensesByDate = () => {
+    const getExpensesByDate = (): Map<number, Map<number, Map<number, ExpenseType[]>>> => {
         const expensesByDate = new Map();
 
         expenses.forEach(expense => {
@@ -66,18 +67,18 @@ function Calendar() {
         return expensesByDate;
     }
 
-    const onNoteMessage = (payload) => {
+    const onNoteMessage = (newNote: NoteType): void => {
         const newNotes = [...notes];
-        const index = newNotes.findIndex(note => note.year === payload.note.year && note.month === payload.note.month);
+        const index = newNotes.findIndex(note => note.year === newNote.year && note.month === newNote.month);
         if (index > -1) {
-            newNotes[index] = payload.note;
+            newNotes[index] = newNote;
         } else {
-            newNotes.push(payload.note);
+            newNotes.push(newNote);
         }
         setNotes(newNotes);
     }
 
-    const getNotesByMonth = () => {
+    const getNotesByMonth = (): Map<number, Map<number, NoteType>> => {
         const notesByMonth = new Map();
 
         notes.forEach(note => {
@@ -101,18 +102,20 @@ function Calendar() {
             <SockJsClient
                 url={'http://localhost:8080/events'}
                 topics={['/topic/expense']}
-                onMessage={onExpenseMessage}/>
+                onMessage={(payload: any) => onExpenseMessage(payload.expense)}/>
             <SockJsClient
                 url={'http://localhost:8080/events'}
                 topics={['/topic/note']}
-                onMessage={onNoteMessage}/>
-            {years.map(year =>
-                <YearHeader
+                onMessage={(payload: any) => onNoteMessage(payload.note)}/>
+            {years.map(year => {
+                // noinspection HtmlUnknownAttribute
+                return <YearHeader
                     key={year}
                     year={year}
                     expenses={expensesByDate.get(year)}
                     isActive={year === activeYear}
-                    setActiveYear={setActiveYear}/>)}
+                    setActiveYear={setActiveYear}/>;
+            })}
             <Year
                 year={activeYear}
                 expenses={expensesByDate.get(activeYear)}
@@ -120,6 +123,21 @@ function Calendar() {
                 onExpenseDeleted={onExpenseDeleted}/>
         </div>
     );
+}
+
+export type ExpenseType = {
+    id: string,
+    date: Date,
+    name: string,
+    category: string,
+    amount: number,
+}
+
+export type NoteType = {
+    year: number,
+    month: number,
+    paid: boolean,
+    text: string,
 }
 
 export default Calendar;

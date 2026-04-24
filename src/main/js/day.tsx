@@ -3,13 +3,21 @@
 import React, {useState} from "react";
 import Expense from "./expense";
 import EditExpense from "./editExpense";
+import {ExpenseType} from "./calendar";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
 
-function Day({year, month, date, expenses, onExpenseDeleted}) {
-    const [isAddingExpense, setIsAddingExpense] = useState(false);
+function Day({year, month, date, expenses, onExpenseDeleted}: {
+    year: number;
+    month: number;
+    date: number;
+    expenses?: ExpenseType[];
+    onExpenseDeleted: (id: string) => void;
+}) {
 
-    const total = expenses?.reduce((total, expense) => total + expense.amount, 0).toFixed(2);
+    const [isAddingExpense, setIsAddingExpense] = useState<boolean>(false);
+
+    const total = expenses?.reduce((total, expense) => total + expense.amount, 0);
 
     return (
         date
@@ -19,24 +27,25 @@ function Day({year, month, date, expenses, onExpenseDeleted}) {
                     <div className="add-expense" onClick={() => setIsAddingExpense(!isAddingExpense)}>
                         <FontAwesomeIcon icon={faPlus} size="sm"/>
                     </div>
-                    {expenses &&
+                    {total &&
                         <span className={`total ${total >= 0 ? "positive" : "negative"}-text`}>
-                            ${total}
+                            ${total.toFixed(2)}
                         </span>}
                 </div>
 
                 {isAddingExpense &&
-                    // @ts-expect-error
                     <EditExpense
                         year={year}
                         month={month}
                         date={date}
                         closeForm={() => setIsAddingExpense(false)}/>}
-                {expenses?.map(expense =>
-                    <Expense
+                {expenses?.map(expense => {
+                    // noinspection HtmlUnknownAttribute
+                    return <Expense
                         key={expense.id}
                         expense={expense}
-                        onDeleted={() => onExpenseDeleted(expense.id)}/>)}
+                        onDeleted={() => onExpenseDeleted(expense.id)}/>;
+                })}
             </td>
 
             : <td className="day-empty"></td>

@@ -1,40 +1,55 @@
 'use strict';
 
 import React, {useEffect, useState} from "react";
+import {ExpenseType} from "./calendar";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faFloppyDisk, faRotateLeft, faTrashCan} from '@fortawesome/free-solid-svg-icons'
 
-function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
-    const [name, setName] = useState(expense?.name ?? "");
-    const [category, setCategory] = useState(expense?.category ?? "");
-    const [amount, setAmount] = useState(expense?.amount ?? "");
+function EditExpense({year, month, date, expense, onDeleted, closeForm}: {
+    year?: number;
+    month?: number;
+    date?: number;
+    expense?: ExpenseType;
+    onDeleted?: () => void;
+    closeForm: () => void;
+}) {
 
-    const [categories, setCategories] = useState([]);
+    const [name, setName] = useState<string>(expense?.name ?? "");
+    const [category, setCategory] = useState<string>(expense?.category ?? "");
+    const [amount, setAmount] = useState<string>(expense?.amount.toString() ?? "");
+
+    const [categories, setCategories] = useState<string[]>([]);
 
     useEffect(() => {
+        // noinspection TypeScriptValidateTypes
         fetch("/api/expense/category/all")
             .then(response => response.json())
             .then(data => data._embedded.strings)
-            .then(data => {
+            .then((data: string[]) => {
                 setCategories(data);
                 setCategory(expense?.category ?? data[0]);
             });
     }, [])
 
-    const onAmountChanged = (e) => {
+    const onAmountChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setAmount(e.target.value.replace(/[^-0-9.]/, ""));
     }
 
-    const onSave = () => {
+    const onSave = (): void => {
         if (isSaveEnabled) {
-            const payload = {
-                date: expense?.date ?? new Date(year, month, date),
+            const payload: {
+                id?: string,
+                date: Date,
+                name: string,
+                category: string,
+                amount: string
+            } = {
+                date: expense?.date ?? new Date(year!, month!, date!),
                 name: name,
                 category: category,
                 amount: amount,
             }
             if (expense) {
-                // @ts-expect-error
                 payload.id = expense.id;
             }
 
@@ -47,16 +62,16 @@ function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
         }
     }
 
-    const onDelete = () => {
+    const onDelete = (): void => {
         const request = {
             method: "DELETE",
             headers: {'Content-Type': 'application/json'},
-            body: expense.id,
+            body: expense!.id,
         }
         fetch("api/expense", request)
             .then(response => {
                 if (response.ok) {
-                    onDeleted();
+                    onDeleted!();
                 }
                 closeForm()
             });
@@ -73,9 +88,9 @@ function EditExpense({year, month, date, expense, onDeleted, closeForm}) {
                 type="text"
                 placeholder="Name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}/>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}/>
 
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <select value={category} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategory(e.target.value)}>
                 {categories.map(category =>
                     <option key={category} value={category}>
                         {category.charAt(0) + category.slice(1).toLowerCase()}
