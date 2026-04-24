@@ -22,15 +22,15 @@ function Calendar() {
             .then(data => setNotes(data));
     }, [])
 
-    const onMessage = (payload, entities, setEntities) => {
-        const newEntities = [...entities];
-        const index = newEntities.findIndex(entity => entity.id === payload.id);
+    const onExpenseMessage = (payload) => {
+        const newExpenses = [...expenses];
+        const index = newExpenses.findIndex(expense => expense.id === payload.expense.id);
         if (index > -1) {
-            newEntities[index] = payload;
+            newExpenses[index] = payload.expense;
         } else {
-            newEntities.push(payload);
+            newExpenses.push(payload.expense);
         }
-        setEntities(newEntities);
+        setExpenses(newExpenses);
     }
 
     const onExpenseDeleted = (id) => {
@@ -66,6 +66,17 @@ function Calendar() {
         return expensesByDate;
     }
 
+    const onNoteMessage = (payload) => {
+        const newNotes = [...notes];
+        const index = newNotes.findIndex(note => note.year === payload.note.year && note.month === payload.note.month);
+        if (index > -1) {
+            newNotes[index] = payload.note;
+        } else {
+            newNotes.push(payload.note);
+        }
+        setNotes(newNotes);
+    }
+
     const getNotesByMonth = () => {
         const notesByMonth = new Map();
 
@@ -90,11 +101,11 @@ function Calendar() {
             <SockJsClient
                 url={'http://localhost:8080/events'}
                 topics={['/topic/expense']}
-                onMessage={message => onMessage(message.expense, expenses, setExpenses)}/>
+                onMessage={onExpenseMessage}/>
             <SockJsClient
                 url={'http://localhost:8080/events'}
                 topics={['/topic/note']}
-                onMessage={message => onMessage(message.note, notes, setNotes)}/>
+                onMessage={onNoteMessage}/>
             {years.map(year =>
                 <YearHeader
                     key={year}
