@@ -18,9 +18,8 @@ function Week({year, month, week, expenses, onExpenseDeleted}: {
         <tr>
             {DAYS.map(day => {
                 const date = week[day];
-                // noinspection HtmlUnknownAttribute
                 return <Day
-                    key={`${year}_${day}`}
+                    key={day}
                     year={year}
                     month={month}
                     date={date}
@@ -31,4 +30,4 @@ function Week({year, month, week, expenses, onExpenseDeleted}: {
     );
 }
 
-export default Week;
+export default React.memo(Week);

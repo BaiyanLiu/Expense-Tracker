@@ -2,11 +2,11 @@ spring:
   data.rest.base-path: /api
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
 
-  jpa.hibernate.ddl-auto: create
+  jpa.hibernate.ddl-auto: update
 
 management:
   endpoints:

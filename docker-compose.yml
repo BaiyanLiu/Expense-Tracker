@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    volumes:
+      # The embedded database lives here and survives "docker compose down" and rebuilds.
+      - expenses:/data
+    ports:
+      - "8080:8080"
+
+volumes:
+  expenses:

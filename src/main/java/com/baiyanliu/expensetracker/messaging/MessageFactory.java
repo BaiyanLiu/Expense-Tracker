@@ -1,5 +1,6 @@
 package com.baiyanliu.expensetracker.messaging;
 
+import com.baiyanliu.expensetracker.entity.Category;
 import com.baiyanliu.expensetracker.entity.Expense;
 import com.baiyanliu.expensetracker.entity.Note;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,23 @@ public class MessageFactory {
         new ExpenseMessage(expense).send(webSocket);
     }
 
+    public void createDeletedMessage(long expenseId) {
+        new ExpenseDeletedMessage(expenseId).send(webSocket);
+    }
+
+    public void createImportedMessage(int count) {
+        new ExpensesImportedMessage(count).send(webSocket);
+    }
+
     public void createMessage(Note note) {
         new NoteMessage(note).send(webSocket);
+    }
+
+    public void createMessage(Category category) {
+        new CategoryMessage(category).send(webSocket);
+    }
+
+    public void createCategoryMergedMessage(long fromId, long toId) {
+        new CategoryMergedMessage(fromId, toId).send(webSocket);
     }
 }

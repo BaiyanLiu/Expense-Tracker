@@ -1,40 +1,34 @@
 package com.baiyanliu.expensetracker.controller;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.StreamSupport;
 
 abstract class CrudController<T> {
     private final CrudRepository<T, ?> repository;
+    // the key the page reads the list from, e.g. "expenses"
+    private final String collectionName;
 
-    CrudController(CrudRepository<T, ?> repository) {
+    CrudController(CrudRepository<T, ?> repository, String collectionName) {
         this.repository = repository;
+        this.collectionName = collectionName;
     }
 
-    ResponseEntity<CollectionModel<EntityModel<T>>> getAll() {
-        List<EntityModel<T>> entities = StreamSupport.stream(repository.findAll().spliterator(), false)
-                .map(EntityModel::of)
-                .toList();
-        return ResponseEntity.ok(CollectionModel.of(entities));
+    // same shape as a HAL collection ({"_embedded": {"expenses": [...]}}), built directly because
+    // HAL's own serializer slows down sharply once there are thousands of items
+    ResponseEntity<Map<String, Map<String, List<T>>>> getAll() {
+        List<T> entities = StreamSupport.stream(repository.findAll().spliterator(), false).toList();
+        return ResponseEntity.ok(Map.of("_embedded", Map.of(collectionName, entities)));
     }
 
-    ResponseEntity<EntityModel<T>> create( T entity) {
-        return ResponseEntity.ok(EntityModel.of(upsert(entity)));
-    }
-
-    ResponseEntity<EntityModel<T>> update(@RequestBody T entity) {
-        return ResponseEntity.ok(EntityModel.of(upsert(entity)));
-    }
-
-    private T upsert(T entity) {
+    ResponseEntity<EntityModel<T>> upsert(T entity) {
         entity = repository.save(entity);
         onUpserted(entity);
-        return entity;
+        return ResponseEntity.ok(EntityModel.of(entity));
     }
 
     abstract void onUpserted(T entity);

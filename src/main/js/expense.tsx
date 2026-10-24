@@ -3,6 +3,8 @@
 import React, {useState} from "react";
 import EditExpense from "./editExpense";
 import {ExpenseType} from "./calendar";
+import {useCategoryLookup} from "./categories";
+import {amountClass, formatAmount} from "./amount";
 
 function Expense({expense, onDeleted}: {
     expense: ExpenseType;
@@ -10,13 +12,18 @@ function Expense({expense, onDeleted}: {
 }) {
 
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const category = useCategoryLookup()(expense.categoryId);
 
     return (
         <div>
-            <div className="expense" onClick={() => setIsEditing(!isEditing)}>
+            <div
+                className="expense"
+                title={[category.name, expense.personal && "Personal", expense.note].filter(Boolean).join("\n")}
+                style={{borderLeftColor: category.color}}
+                onClick={() => setIsEditing(!isEditing)}>
                 <span className="name">{expense.name}</span>
-                <span className={`amount ${expense.amount >= 0 ? "positive" : "negative"}-text`}>
-                    ${expense.amount.toFixed(2)}
+                <span className={`amount ${amountClass(expense.amount)}`}>
+                    {formatAmount(expense.amount)}
                 </span>
             </div>
             {isEditing &&
@@ -28,4 +35,4 @@ function Expense({expense, onDeleted}: {
     )
 }
 
-export default Expense;
+export default React.memo(Expense);

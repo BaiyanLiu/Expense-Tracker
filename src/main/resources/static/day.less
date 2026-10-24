@@ -16,10 +16,21 @@
 
     .add-expense {
       .button-with-border();
+      // flex centers the icon exactly, instead of leaving it on the text baseline
+      align-items: center;
       background-color: @positive-color-darker;
-      border-radius: 10px;
+      border-radius: 50%;
       display: none;
+      height: 14px;
+      justify-content: center;
       margin: -1px 5px;
+      vertical-align: 1px;
+      width: 14px;
+
+      // small enough to leave a margin inside the circle
+      & svg {
+        height: 10px;
+      }
 
       &:hover {
         background-color: @positive-color-dark;
@@ -28,7 +39,7 @@
 
     &:hover {
       .add-expense {
-        display: inline-block;
+        display: inline-flex;
       }
     }
   }

@@ -12,20 +12,19 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-stomp": "^5.1.0",
-    "rest": "^2.0.0",
     "@fortawesome/react-fontawesome": "^3.3.0",
-    "@fortawesome/free-solid-svg-icons": "^7.2.0",
-    "typescript": "^6.0.3",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@tsconfig/recommended": "^1.0.13"
+    "@fortawesome/free-solid-svg-icons": "^7.2.0"
   },
   "scripts": {
-    "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
+    "watch": "webpack --watch --mode development --output-path ./target/classes/static/built --output-filename bundle.js"
   },
   "devDependencies": {
     "webpack": "^5.99.7",
     "webpack-cli": "^6.0.1",
-    "ts-loader": "^9.5.7"
+    "ts-loader": "^9.5.7",
+    "typescript": "^6.0.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@tsconfig/recommended": "^1.0.13"
   }
 }

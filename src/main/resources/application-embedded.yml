@@ -1,0 +1,8 @@
+# Embedded H2 database stored in a file, used by the Docker image so no separate database is needed.
+# PostgreSQL mode and lower-case names keep the schema and queries the same as on Postgres; NON_KEYWORDS lets
+# Note keep its year and month columns, which are reserved words in H2.
+spring:
+  datasource:
+    url: jdbc:h2:file:${EXPENSE_DATA_DIR:./data}/expensetracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;NON_KEYWORDS=YEAR,MONTH
+    username: sa
+    password:

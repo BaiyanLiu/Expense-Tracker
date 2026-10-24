@@ -2,6 +2,7 @@
 
 import React from "react";
 import {ExpenseType} from "./calendar";
+import {formatAmount, roundToCents, sumAmounts} from "./amount";
 
 function YearHeader({year, expenses, isActive, setActiveYear}: {
     year: number,
@@ -10,19 +11,17 @@ function YearHeader({year, expenses, isActive, setActiveYear}: {
     setActiveYear: (year: number) => void
 }) {
 
-    const getTotal = (): string => {
+    const getTotal = (): number => {
         let total = 0;
-        expenses?.forEach((month, _0, _1) =>
-            month.forEach((date, _0, _1) =>
-                total += date.reduce((total, expense) => total + expense.amount, 0)))
-        return total.toFixed(2);
+        expenses?.forEach(month => month.forEach(date => total += sumAmounts(date)));
+        return roundToCents(total);
     }
 
     return (
         <h2 className={`year-header ${isActive ? "active" : ""}`} onClick={() => setActiveYear(year)}>
-            {year} - ${getTotal()}
+            {year} - {formatAmount(getTotal())}
         </h2>
     );
 }
 
-export default YearHeader;
+export default React.memo(YearHeader);

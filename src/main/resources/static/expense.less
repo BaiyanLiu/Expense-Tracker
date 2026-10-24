@@ -2,9 +2,11 @@
 
 .expense {
   .button();
+  // colored by the expense's category (set inline)
+  border-left: 3px solid transparent;
   display: grid;
   grid-template-columns: auto auto;
-  padding: 2px;
+  padding: 2px 2px 2px 4px;
 
   .name {
     text-align: left;
@@ -23,49 +25,85 @@
     margin: 2px;
   }
 
-  & input {
+  & input, & textarea {
     width: calc(100% - 10px);
+  }
+
+  // browsers give text areas their own default font, so spell it out for every field
+  & input, & select, & textarea {
+    font-family: inherit;
+    font-size: 13.3333px;
+  }
+
+  & textarea {
+    margin: 2px;
+    resize: vertical;
   }
 
   & select {
     width: calc(100% - 4px);
   }
 
-  .button {
+  .personal {
+    cursor: pointer;
+    display: block;
+    font-size: 13.3333px;
+    margin: 2px;
+    text-align: left;
+
+    & input {
+      cursor: pointer;
+      margin: 0 4px 0 0;
+      vertical-align: middle;
+      width: auto;
+    }
+  }
+
+  .cancel-button, .save-button, .delete-button, .disabled-button {
     .button-with-border();
     margin: 2px;
   }
 
   .cancel-button {
-    .button();
-    background-color: @neutral-color-dark;
-
-    &:hover {
-      background-color: @neutral-color;
-    }
+    .cancel-button-colors();
   }
 
   .save-button {
-    .button();
-    background-color: @positive-color-darker;
-
-    &:hover {
-      background-color: @positive-color-dark;
-    }
+    .save-button-colors();
   }
 
   .delete-button {
-    .button();
-    background-color: @negative-color-darker;
-
-    &:hover {
-      background-color: @negative-color-dark;
-    }
+    .delete-button-colors();
   }
 
   .disabled-button {
-    .button();
-    background-color: @disabled-color;
-    cursor: not-allowed;
+    .disabled-button-colors();
+  }
+}
+
+// floats under the name input in the same white box style; drawn on the page body, so it sits outside .edit-expense
+.name-suggestions {
+  .border();
+  background-color: @primary-color;
+  box-shadow: 0 2px 6px fade(@primary-background-color, 50%);
+  box-sizing: border-box;
+  color: @primary-background-color;
+  font-size: 13.3333px;
+  overflow: hidden;
+  position: absolute;
+  text-align: left;
+  z-index: 10;
+}
+
+.name-suggestion {
+  .button();
+  overflow: hidden;
+  padding: 1px 4px 1px 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.highlighted {
+    background-color: @neutral-color-dark;
+    color: @primary-color;
   }
 }

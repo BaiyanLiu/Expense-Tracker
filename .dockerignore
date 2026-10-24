@@ -1,0 +1,9 @@
+.git
+.idea
+*.iml
+node_modules
+target
+src/main/resources/static/built
+Dockerfile
+docker-compose.yml
+.dockerignore

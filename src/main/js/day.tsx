@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import Expense from "./expense";
 import EditExpense from "./editExpense";
 import {ExpenseType} from "./calendar";
+import {amountClass, formatAmount, sumAmounts} from "./amount";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus} from '@fortawesome/free-solid-svg-icons'
 
@@ -17,7 +18,7 @@ function Day({year, month, date, expenses, onExpenseDeleted}: {
 
     const [isAddingExpense, setIsAddingExpense] = useState<boolean>(false);
 
-    const total = expenses?.reduce((total, expense) => total + expense.amount, 0);
+    const total = expenses && sumAmounts(expenses);
 
     return (
         date
@@ -27,9 +28,9 @@ function Day({year, month, date, expenses, onExpenseDeleted}: {
                     <div className="add-expense" onClick={() => setIsAddingExpense(!isAddingExpense)}>
                         <FontAwesomeIcon icon={faPlus} size="sm"/>
                     </div>
-                    {total &&
-                        <span className={`total ${total >= 0 ? "positive" : "negative"}-text`}>
-                            ${total.toFixed(2)}
+                    {total !== undefined &&
+                        <span className={`total ${amountClass(total)}`}>
+                            {formatAmount(total)}
                         </span>}
                 </div>
 
@@ -39,17 +40,15 @@ function Day({year, month, date, expenses, onExpenseDeleted}: {
                         month={month}
                         date={date}
                         closeForm={() => setIsAddingExpense(false)}/>}
-                {expenses?.map(expense => {
-                    // noinspection HtmlUnknownAttribute
-                    return <Expense
+                {expenses?.map(expense =>
+                    <Expense
                         key={expense.id}
                         expense={expense}
-                        onDeleted={() => onExpenseDeleted(expense.id)}/>;
-                })}
+                        onDeleted={() => onExpenseDeleted(expense.id)}/>)}
             </td>
 
             : <td className="day-empty"></td>
     )
 }
 
-export default Day;
+export default React.memo(Day);

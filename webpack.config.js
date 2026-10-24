@@ -4,7 +4,7 @@ module.exports = {
     entry: './src/main/js/app.tsx',
     devtool: 'source-map',
     cache: true,
-    mode: 'development',
+    mode: 'production',
     output: {
         path: __dirname,
         filename: './src/main/resources/static/built/bundle.js'
@@ -14,7 +14,7 @@ module.exports = {
     },
     module: {
         rules: [{
-            test: path.join(__dirname, '.'),
+            test: /\.(ts|tsx)$/,
             exclude: /(node_modules)/,
             use: 'ts-loader',
         }],

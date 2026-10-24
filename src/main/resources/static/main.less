@@ -18,7 +18,9 @@ body {
 .year-header {
   .button();
   display: inline-block;
+  line-height: 1.2;
   padding: 5px;
+  vertical-align: middle;
 
   &.active {
     background-color: @primary-color;
@@ -27,34 +29,443 @@ body {
   }
 }
 
+.year-nav {
+  .button-with-border();
+  background-color: @primary-background-color;
+  color: @primary-color;
+  font-size: 1.5em;
+  line-height: 1.2;
+  margin: 0 5px;
+  // 4px plus the 1px border matches the year header's 5px padding
+  padding: 4px 8px;
+  vertical-align: middle;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.3;
+  }
+}
+
+// one day column of the month table, plus its 1px padding each side and the table's 2px border spacing
+@day-width: 175px;
+@month-width: 7 * (@day-width + 2px) + 8 * 2px;
+
 .month {
+  // fixed, so the page keeps its width even when every month is collapsed and no table is shown
+  width: @month-width;
+
+  // the title and its controls are centered on one line, rather than sitting on the text baseline,
+  // so the bordered buttons and the note box line up with the larger title text
+  .month-header {
+    align-items: center;
+    display: flex;
+  }
+
+  .header-controls, .note {
+    align-items: center;
+    display: flex;
+  }
+
+  // the same margin open or collapsed, so toggling doesn't move the header
   & h3 {
-    display: inline-block;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    margin: 8px 0;
+
+    // the "(Each ...)" half amount sits a bit darker than the month total
+    .half-amount {
+      opacity: 0.7;
+    }
+  }
+
+  .collapse-icon {
+    margin-right: 8px;
+    width: 10px;
+  }
+
+  // slides open by growing its single grid row from 0fr to 1fr; keep the 200ms in step with SLIDE_MS in month.tsx
+  .month-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms ease;
+
+    &.open {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  .month-body-inner {
+    min-height: 0;
+    overflow: hidden;
+
+    // the space the header margin used to give an open month
+    & > table {
+      margin-bottom: 12px;
+    }
+  }
+
+  // By Category shares the header line, so it fades rather than slides; Paid stays shown on a collapsed month
+  .summary-button {
+    transition: opacity 200ms ease, visibility 200ms;
+
+    &.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .month-body {
+      transition: none;
+    }
+
+    .summary-button {
+      transition: none;
+    }
   }
 
   & th, td {
     padding: 1px;
     text-align: center;
-    width: 175px;
+    width: @day-width;
   }
 
   .note {
     margin-left: 10px;
-    vertical-align: center;
 
     .text {
       margin-left: 10px;
     }
+  }
 
-    .save-button {
-      .button-with-border();
-      background-color: @positive-color-darker;
-      margin-left: 10px;
-      padding: 0 1px;
+  .summary-button {
+    .button-with-border();
+    margin-left: 10px;
+    padding: 2px 5px;
 
-      &:hover {
-        background-color: @positive-color-dark;
+    // a small gap between the icon and the label
+    svg {
+      margin-right: 4px;
+    }
+
+    &.active {
+      background-color: @primary-color;
+      color: @primary-background-color;
+    }
+  }
+
+  .category-summary {
+    margin: 0 0 10px 0;
+
+    &.empty {
+      color: darken(@primary-color, 25%);
+    }
+
+    & td {
+      padding: 1px 5px;
+      width: auto;
+    }
+
+    .category {
+      text-align: left;
+    }
+
+    .amount, .share {
+      text-align: right;
+    }
+
+    .bar {
+      width: 200px;
+    }
+
+    .bar-fill {
+      background-color: @negative-color-dark;
+      border-radius: 2px;
+      height: 10px;
+    }
+  }
+}
+
+.panel-button {
+  .button-with-border();
+  margin-left: 10px;
+  padding: 2px 5px;
+  vertical-align: middle;
+
+  // a small gap between the icon and the label
+  svg {
+    margin-right: 4px;
+  }
+
+  &.active {
+    background-color: @primary-color;
+    color: @primary-background-color;
+  }
+}
+
+.panel {
+  .border();
+  margin: 5px 0;
+  max-width: 400px;
+  padding: 5px;
+
+  .panel-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .save-button, .disabled-button {
+    .button-with-border();
+    margin: 2px;
+    text-align: center;
+  }
+
+  .save-button {
+    .save-button-colors();
+  }
+
+  .disabled-button {
+    .disabled-button-colors();
+  }
+}
+
+@year-chart-previous-color: darken(@primary-color, 55%);
+
+.year-chart {
+  .panel();
+  max-width: 860px;
+
+  .empty {
+    color: darken(@primary-color, 40%);
+  }
+
+  .panel-title select {
+    font-weight: normal;
+    margin-left: 10px;
+  }
+
+  .baseline {
+    stroke: darken(@primary-color, 50%);
+    stroke-width: 1;
+  }
+
+  .bar {
+    cursor: pointer;
+
+    .hit {
+      fill: transparent;
+    }
+
+    .bar-fill {
+      fill: @negative-color-dark;
+    }
+
+    &:hover .hit {
+      fill: fade(@primary-color, 8%);
+    }
+
+    &:hover .bar-fill {
+      fill: @negative-color;
+    }
+
+    // category bars take the category's color inline, so hovering brightens them instead
+    &:hover .bar-fill.category {
+      filter: brightness(1.25);
+    }
+
+    .previous-fill {
+      fill: @year-chart-previous-color;
+    }
+
+    &:hover .previous-fill {
+      fill: lighten(@year-chart-previous-color, 15%);
+    }
+  }
+
+  .comparison {
+    color: darken(@primary-color, 20%);
+    font-size: 0.9em;
+    margin-bottom: 5px;
+
+    .legend {
+      border-radius: 2px;
+      display: inline-block;
+      height: 10px;
+      margin: 0 4px 0 0;
+      vertical-align: middle;
+      width: 10px;
+
+      &.previous {
+        background-color: @year-chart-previous-color;
       }
+
+      &.current {
+        background-color: @negative-color-dark;
+        margin-left: 10px;
+      }
+    }
+
+    .summary {
+      margin-left: 20px;
+    }
+  }
+
+  .value {
+    fill: @primary-color;
+    font-size: 12px;
+  }
+
+  .label {
+    fill: darken(@primary-color, 30%);
+    font-size: 12px;
+  }
+
+  .average {
+    stroke: @primary-color;
+    stroke-dasharray: 4 4;
+    stroke-width: 1;
+  }
+
+  .average-label {
+    fill: @primary-color;
+    font-size: 12px;
+  }
+}
+
+.import-csv {
+  .panel();
+  max-width: 860px;
+
+  .hint, .empty {
+    color: darken(@primary-color, 30%);
+    font-size: 0.9em;
+    margin-bottom: 5px;
+  }
+
+  // the real file input is hidden behind a button that matches the rest of the page
+  .file-button {
+    .button-with-border();
+    display: inline-block;
+    padding: 2px 5px;
+
+    // a small gap between the icon and the label
+    svg {
+      margin-right: 4px;
+    }
+
+    & input {
+      display: none;
+    }
+  }
+
+  .file-name {
+    margin-left: 10px;
+  }
+
+  .message {
+    margin-top: 5px;
+  }
+
+  .options {
+    margin-bottom: 5px;
+
+    & select {
+      margin-left: 5px;
+    }
+  }
+
+  .summary {
+    margin: 10px 0 5px 0;
+
+    .skipped {
+      color: darken(@primary-color, 30%);
+      margin-left: 15px;
+    }
+
+    .new-categories {
+      color: darken(@primary-color, 20%);
+      font-size: 0.9em;
+    }
+  }
+
+  .preview {
+    margin-bottom: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+
+    & td {
+      padding: 1px 10px 1px 0;
+    }
+
+    .name {
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .amount {
+      text-align: right;
+    }
+
+    .type, .status {
+      color: darken(@primary-color, 30%);
+      font-size: 0.9em;
+    }
+
+    .excluded {
+      opacity: 0.5;
+    }
+  }
+
+  .save-button, .disabled-button {
+    display: inline-block;
+    padding: 2px 5px;
+  }
+}
+
+.category-dot {
+  border-radius: 50%;
+  display: inline-block;
+  height: 8px;
+  margin-right: 5px;
+  vertical-align: middle;
+  width: 8px;
+}
+
+.categories {
+  .panel();
+  // shrink to the table instead of stretching to the panel's max width
+  width: fit-content;
+
+  & td {
+    padding: 1px 3px;
+  }
+
+  & input[type=text] {
+    width: 160px;
+  }
+
+  & input.color {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    height: 22px;
+    padding: 0;
+    width: 26px;
+  }
+
+  // same gap after the name as the new category's save button has
+  & select {
+    margin-left: 2px;
+  }
+
+  .add .save-button, .add .disabled-button {
+    padding: 0 5px;
+
+    & svg {
+      margin-right: 3px;
     }
   }
 }

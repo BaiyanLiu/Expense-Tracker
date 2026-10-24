@@ -5,10 +5,12 @@ import com.baiyanliu.expensetracker.entity.repository.NoteRepository;
 import com.baiyanliu.expensetracker.messaging.MessageFactory;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @Log
 @RequestMapping("/api/note")
@@ -18,12 +20,12 @@ public class NoteController extends CrudController<Note> {
 
     @Autowired
     private NoteController(NoteRepository noteRepository, MessageFactory messageFactory) {
-        super(noteRepository);
+        super(noteRepository, "notes");
         this.messageFactory = messageFactory;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<CollectionModel<EntityModel<Note>>> getAllNotes() {
+    public ResponseEntity<Map<String, Map<String, List<Note>>>> getAllNotes() {
         log.info("getAllNotes");
         return getAll();
     }
@@ -31,13 +33,13 @@ public class NoteController extends CrudController<Note> {
     @PostMapping
     public ResponseEntity<EntityModel<Note>> createNote(@RequestBody Note note) {
         log.info("createNote - " + note);
-        return create(note);
+        return upsert(note);
     }
 
     @PutMapping
     public ResponseEntity<EntityModel<Note>> updateNote(@RequestBody Note note) {
         log.info("updateNote - " + note);
-        return update(note);
+        return upsert(note);
     }
 
     @Override

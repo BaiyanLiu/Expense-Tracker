@@ -42,12 +42,51 @@ select {
   .border();
 }
 
+// colors for the action buttons in forms and panels
+.save-button-colors() {
+  background-color: @positive-color-darker;
+
+  &:hover {
+    background-color: @positive-color-dark;
+  }
+}
+
+.cancel-button-colors() {
+  background-color: @neutral-color-dark;
+
+  &:hover {
+    background-color: @neutral-color;
+  }
+}
+
+.delete-button-colors() {
+  background-color: @negative-color-darker;
+
+  &:hover {
+    background-color: @negative-color-dark;
+  }
+}
+
+.disabled-button-colors() {
+  background-color: @disabled-color;
+  cursor: not-allowed;
+}
+
 .positive-text {
   color: @positive-color;
 }
 
 .negative-text {
   color: @negative-color;
+}
+
+// amount colors: negative amounts are red, positive amounts and zero are white
+.negative-amount-text {
+  color: @negative-color;
+}
+
+.positive-amount-text {
+  color: @primary-color;
 }
 
 .two-columns {
