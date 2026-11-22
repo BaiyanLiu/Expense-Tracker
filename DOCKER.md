@@ -47,8 +47,26 @@ docker run -d --name expensetracker -p 8080:8080 -v expenses:/data --restart unl
 
 If you used the earlier two-container setup, its Postgres data is still in the old `expense-data` volume; nothing here touches it. Delete it with `docker volume rm expense-tracker_expense-data` once you don't need it.
 
+## Export the image
+
+To move the app to another machine without building it there, save the image to a single file:
+
+```
+docker build -t expensetracker .
+docker image save expensetracker -o expensetracker.tar
+```
+
+The `docker build` step matters: Compose names its image `expense-tracker-app`, so `expensetracker` only exists after a plain `docker build -t expensetracker .`.
+
+Copy `expensetracker.tar` to the other machine, then load and start it there:
+
+```
+docker image load -i expensetracker.tar
+docker run -d --name expensetracker -p 8080:8080 -v expenses:/data --restart unless-stopped expensetracker
+```
+
+The `.tar` holds only the app, not your data. To bring your expenses along, copy a database backup (see the table above) into the new `expenses` volume.
+
 ## Before exposing it beyond your PC
 
 `application.yml` exposes every actuator endpoint (`/actuator/*`) and the app has no login. That's fine on localhost, but put it behind authentication before opening port 8080 to a network.
-
-docker image save expensetracker -o expensetracker.tar
